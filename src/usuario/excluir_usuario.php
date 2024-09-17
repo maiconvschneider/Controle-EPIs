@@ -11,14 +11,14 @@ try {
     $banco->ExecutarComando($sql, $parametros);
     echo
     "<script>
-            alert('Usuário removido com sucesso!');
-            window.location = '../index.php?tela=usuarios';
-        </script>";
+        alert('Usuário removido com sucesso!');
+        window.location = '../index.php?tela=usuarios';
+    </script>";
 } catch (PDOException $erro) {
     $msg = $erro->getMessage();
     echo
     "<script>
-            alert(\"$msg\");
-            window.location = '../index.php?tela=usuarios';
-        </script>";
+        alert(\"$msg\");
+        window.location = '../index.php?tela=usuarios';
+    </script>";
 }

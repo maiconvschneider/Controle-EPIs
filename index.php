@@ -55,6 +55,7 @@
                 <!-- Script para importar as telas do sistema -->
                 <?php
                 $tela = isset($_GET['tela']) ? $_GET['tela'] : '';
+                echo $tela;
                 switch ($tela) {
                     case 'usuarios':
                         include 'telas/usuarios.php';
