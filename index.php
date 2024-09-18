@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Controle de EPI's</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body>
@@ -24,28 +25,34 @@
     </header>
     <div class="container-fluid">
         <div class="row">
-            <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-                <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="">TEItech</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"></button>
-                    </div>
+            <div class="sidebar col-md-3 col-lg-2 p-0 bg-light border-end shadow-sm" style="height: 100vh;">
+                <div class="offcanvas-md offcanvas-end bg-light" tabindex="-1" id="sidebarMenu">
                     <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="index.php">Home</a>
+                                <a class="nav-link d-flex align-items-center gap-2" href="index.php" style="padding: 15px; font-weight: 500;">
+                                    <i class="bi bi-house-door"></i> Home
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=usuarios">Usuários</a>
+                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=usuarios" style="padding: 15px; font-weight: 500;">
+                                    <i class="bi bi-people"></i> Usuários
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=colaboradores">Colaboradores</a>
+                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=colaboradores" style="padding: 15px; font-weight: 500;">
+                                    <i class="bi bi-person-badge"></i> Colaboradores
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=epis">EPI's</a>
+                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=epis" style="padding: 15px; font-weight: 500;">
+                                    <i class="bi bi-shield"></i> EPI's
+                                </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=emprestimos">Empréstimos</a>
+                                <a class="nav-link d-flex align-items-center gap-2" href="index.php?tela=emprestimos" style="padding: 15px; font-weight: 500;">
+                                    <i class="bi bi-arrow-left-right"></i> Empréstimos
+                                </a>
                             </li>
                         </ul>
                     </div>
@@ -55,7 +62,6 @@
                 <!-- Script para importar as telas do sistema -->
                 <?php
                 $tela = isset($_GET['tela']) ? $_GET['tela'] : '';
-                echo $tela;
                 switch ($tela) {
                     case 'usuarios':
                         include 'telas/usuarios.php';
@@ -75,8 +81,8 @@
 
                     default:
                         echo '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                                    <h1 class="h2"><strong>Bem-vindo ao sistema!</h1>
-                                </div>';
+                                <h1 class="h2"><strong>Bem-vindo ao sistema!</h1>
+                            </div>';
                         break;
                 }
                 ?>
@@ -85,10 +91,10 @@
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        function excluir(idUsuario) {
+        function excluirUsuario(idUsuario) {
             var confirmou = confirm('Deseja realmente exlcuir este usuário?');
             if (confirmou) {
-                window.location = 'src/excluir_usuario.php?idUsuario=' + idUsuario;
+                window.location = 'src/usuario/excluir_usuario.php?idUsuario=' + idUsuario;
             }
         }
     </script>
@@ -102,20 +108,23 @@
             $parametros = [$id_usuario];
             $dados = $banco->Consultar($sql, $parametros);
             if ($dados) {
+                $tipo_usuario = $dados['tipo'] == 'A' ? 'Administrador' : 'Usuário';
+
                 echo
-                "<script>
-                        document.getElementById('txt_id').value = '{$dados['id_usuario']}';
-                        document.getElementById('txt_nome').value = '{$dados['nome']}';
-                        document.getElementById('txt_usuario').value = '{$dados['usuario']}';
-                        document.getElementById('txt_senha').value = '{$dados['senha']}';
-                    </script>";
+                "<script>                    
+                    document.getElementById('txt_id').value = '{$dados['id_usuario']}';
+                    document.getElementById('txt_nome').value = '{$dados['nome']}';
+                    document.getElementById('txt_usuario').value = '{$dados['usuario']}';
+                    document.getElementById('txt_senha').value = '{$dados['senha']}';
+                    document.getElementById('txt_tipo').value = '$tipo_usuario';
+                </script>";
             }
         } catch (PDOException $erro) {
             $msg = $erro->getMessage();
             echo
             "<script>
-                    alert(\"$msg\");
-                </script>";
+                alert(\"$msg\");
+            </script>";
         }
     }
     ?>

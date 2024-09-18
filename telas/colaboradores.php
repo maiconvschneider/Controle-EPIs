@@ -3,7 +3,7 @@
 </div>
 <form action="src/cadastrar_usuario.php" method="post">
     <div class="row g-4">
-        <div class=col-sm-3>
+        <div class=col-sm-1>
             <label for="txt_id" class="form-label">ID:</label>
             <input type="text" class="form-control" name="txt_id" id="txt_id" value="NOVO" required readonly>
         </div>
@@ -11,7 +11,7 @@
             <label for="txt_nome" class="form-label">Nome:</label>
             <input type="text" class="form-control" name="txt_nome" id="txt_nome" maxlength="255" required>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <label for="txt_matricula" class="form-label">Matrícula:</label>
             <input type="tex" class="form-control" name="txt_matricula" id="txt_matricula" required>
         </div>
@@ -58,8 +58,12 @@
                             <td>{$linha['departamento']}</td>
                             <td>{$linha['email']}</td>
                             <td>
-                                <a href='index.php?tela=colaboradores&idColaborador={$linha['id_colaborador']}'>Editar</a>
-                                <a href='#' onclick='excluir({$linha['id_colaborador']})'>Excluir</a>
+                                <a href='index.php?tela=colaboradores&idColaborador={$linha['id_colaborador']}' class='btn btn-sm btn-outline-primary'>
+                                    <i class='bi bi-pencil'></i>
+                                </a>
+                                <a href='#' onclick='excluir({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger'>
+                                    <i class='bi bi-trash'></i>
+                                </a>
                             </td>
                         </tr>";
                     }
