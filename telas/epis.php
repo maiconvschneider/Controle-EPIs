@@ -1,7 +1,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1>Cadastro de Equipamentos</h1>
 </div>
-<form action="src/cadastrar_usuario.php" method="post">
+<form action="src/equipamentos/cadastrar_equipamento.php" method="post">
     <div class="row g-4">
         <div class=col-sm-1>
             <label for="txt_id" class="form-label">ID:</label>

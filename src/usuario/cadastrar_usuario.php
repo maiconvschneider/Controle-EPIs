@@ -23,7 +23,7 @@ try {
     include '../class/BancodeDados.php';
     $banco = new BancodeDados;
     if ($formulario['id'] == 'NOVO') {
-        $sql = 'INSERT INTO  usuarios (nome, usuario, senha, tipo) VALUES (?,?,?,?)';
+        $sql = 'INSERT INTO usuarios (nome, usuario, senha, tipo) VALUES (?,?,?,?)';
         $parametros =
             [
                 $formulario['nome'],

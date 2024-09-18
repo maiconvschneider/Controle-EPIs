@@ -14,10 +14,10 @@ if (in_array('', $formulario)) {
     exit;
 }
 try {
-    include 'class/BancodeDados.php';
+    include '../class/BancodeDados.php';
     $banco = new BancodeDados;
     if ($formulario['id'] == 'NOVO') {
-        $sql = 'INSERT INTO  equipamentos (nome, descricao, quantidade_total, quantidade_disponivel) VALUES (?,?,?)';
+        $sql = 'INSERT INTO equipamentos (nome, descricao, quantidade_total, quantidade_disponivel) VALUES (?,?,?)';
         $parametros =
             [
                 $formulario['nome'],
@@ -40,14 +40,14 @@ try {
     $banco->ExecutarComando($sql, $parametros);
     echo
     "<script>
-            alert('$msg_sucesso');
-            window.location = '../index.php?tela=equipamentos';
-        </script>";
+        alert('$msg_sucesso');
+        window.location = '../../index.php?tela=equipamentos';
+    </script>";
 } catch (PDOException $erro) {
     $msg = $erro->getMessage();
     echo
     "<script>
-            alert(\"$msg\");
-            window.location = '../index.php?tela=equipamentos';
-        </script>";
+        alert(\"$msg\");
+        window.location = '../../index.php?tela=equipamentos';
+    </script>";
 }

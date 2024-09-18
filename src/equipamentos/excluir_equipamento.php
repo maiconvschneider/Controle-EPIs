@@ -1,10 +1,10 @@
 <?php
 $id_equipamento = isset($_GET['idEquipamento']) ? $_GET['idEquipamento'] : '';
 if (empty($id_equipamento)) {
-    header('LOCATION: ../index.php?tela=equipamentos');
+    header('LOCATION: ../../index.php?tela=equipamentos');
 }
 try {
-    include 'class/BancodeDados.php';
+    include '../class/BancodeDados.php';
     $banco = new BancodeDados;
     $sql = 'DELETE FROM equipamentos WHERE id_equipamento = ?';
     $parametros = [$id_equipamento];
@@ -12,13 +12,13 @@ try {
     echo
     "<script>
         alert('Equipamento removido com sucesso!');
-        window.location = '../index.php?tela=equipamentos';
+        window.location = '../../index.php?tela=equipamentos';
     </script>";
 } catch (PDOException $erro) {
     $msg = $erro->getMessage();
     echo
     "<script>
         alert(\"$msg\");
-        window.location = '../index.php?tela=equipamentos';
+        window.location = '../../index.php?tela=equipamentos';
     </script>";
 }
