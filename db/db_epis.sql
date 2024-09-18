@@ -66,8 +66,8 @@ CREATE TABLE IF NOT EXISTS `db_epis`.`emprestimos` (
   `data_devolucao` TIMESTAMP NULL DEFAULT NULL,
   `status` VARCHAR(255) NULL DEFAULT NULL,
   PRIMARY KEY (`id_emprestimo`),
-  INDEX `id_colaborador_idx` (`id_colaborador` ASC) VISIBLE,
-  INDEX `id_usuario_idx` (`id_usuario` ASC) VISIBLE,
+  INDEX `id_colaborador_idx` (`id_colaborador` ASC),
+  INDEX `id_usuario_idx` (`id_usuario` ASC),
   CONSTRAINT `fk_colaborador_emprestimo`
     FOREIGN KEY (`id_colaborador`)
     REFERENCES `db_epis`.`colaboradores` (`id_colaborador`)
@@ -108,8 +108,8 @@ CREATE TABLE IF NOT EXISTS `db_epis`.`emprestimo_equipamentos` (
   `id_emprestimo` INT(11) NOT NULL,
   `id_equipamento` INT(11) NOT NULL,
   PRIMARY KEY (`id_emprestimo_equipamento`),
-  INDEX `idx_emprestimo` (`id_emprestimo` ASC) VISIBLE,
-  INDEX `idx_equipamento` (`id_equipamento` ASC) VISIBLE,
+  INDEX `idx_emprestimo` (`id_emprestimo` ASC),
+  INDEX `idx_equipamento` (`id_equipamento` ASC),
   CONSTRAINT `fk_emprestimo_equipamentos_emprestimos`
     FOREIGN KEY (`id_emprestimo`)
     REFERENCES `db_epis`.`emprestimos` (`id_emprestimo`)
@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `db_epis`.`logs` (
   `acao` VARCHAR(255) NULL DEFAULT NULL,
   `data` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   PRIMARY KEY (`id_log`),
-  INDEX `id_usuario_idx` (`id_usuario` ASC) VISIBLE,
+  INDEX `id_usuario_idx` (`id_usuario` ASC),
   CONSTRAINT `fk_logs_usuario`
     FOREIGN KEY (`id_usuario`)
     REFERENCES `db_epis`.`usuarios` (`id_usuario`)
