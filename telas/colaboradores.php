@@ -61,7 +61,7 @@
                                 <a href='index.php?tela=colaboradores&idColaborador={$linha['id_colaborador']}' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
-                                <a href='#' onclick='excluir({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger'>
+                                <a href='#' onclick='excluirColaborador({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger'>
                                     <i class='bi bi-trash'></i>
                                 </a>
                             </td>

@@ -81,8 +81,8 @@
 
                     default:
                         echo '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                                <h1 class="h2"><strong>Bem-vindo ao sistema!</h1>
-                            </div>';
+                            <h1 class="h2"><strong>Bem-vindo ao sistema!</h1>
+                        </div>';
                         break;
                 }
                 ?>
@@ -97,37 +97,14 @@
                 window.location = 'src/usuario/excluir_usuario.php?idUsuario=' + idUsuario;
             }
         }
-    </script>
-    <?php
-    if (isset($_GET['idUsuario'])) {
-        $id_usuario = $_GET['idUsuario'];
-        try {
-            include_once 'src/class/BancodeDados.php';
-            $banco = new BancodeDados;
-            $sql = 'SELECT *  FROM usuarios WHERE id_usuario = ?';
-            $parametros = [$id_usuario];
-            $dados = $banco->Consultar($sql, $parametros);
-            if ($dados) {
-                $tipo_usuario = $dados['tipo'] == 'A' ? 'Administrador' : 'Usuário';
 
-                echo
-                "<script>                    
-                    document.getElementById('txt_id').value = '{$dados['id_usuario']}';
-                    document.getElementById('txt_nome').value = '{$dados['nome']}';
-                    document.getElementById('txt_usuario').value = '{$dados['usuario']}';
-                    document.getElementById('txt_senha').value = '{$dados['senha']}';
-                    document.getElementById('txt_tipo').value = '$tipo_usuario';
-                </script>";
+        function excluirColaborador(idColaborador) {
+            var confirmou = confirm('Deseja realmente exlcuir este colaborador?');
+            if (confirmou) {
+                window.location = 'src/colaboradores/excluir_colaborador.php?idColaborador=' + idColaborador;
             }
-        } catch (PDOException $erro) {
-            $msg = $erro->getMessage();
-            echo
-            "<script>
-                alert(\"$msg\");
-            </script>";
         }
-    }
-    ?>
+    </script>
 </body>
 
 </html>
