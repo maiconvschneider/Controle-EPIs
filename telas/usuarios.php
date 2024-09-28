@@ -30,7 +30,7 @@
                             <td>{$linha['nome']}</td>
                             <td>{$linha['usuario']}</td>
                             <td>
-                                <a href='index.php?tela=usuarios&idUsuario={$linha['id_usuario']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='index.php?tela=usuarios&acao=alterar&idUsuario={$linha['id_usuario']}' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
                                 <a href='#' onclick='excluirUsuario({$linha['id_usuario']})' class='btn btn-sm btn-outline-danger'>
@@ -61,7 +61,7 @@
 <div id="adicionar_usuario" class="modal fade" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form id="form_usuario" method="post" action="../src/usuario/cadastrar_usuario.php" enctype="multipart/form-data">
+            <form id="form_usuario" method="post" action="src/usuario/cadastrar_usuario.php" enctype="multipart/form-data">
                 <div class="modal-header" style="background-color: #435d7d; color: #fff;">
                     <h4 class="modal-title">Usuário</h4>
                     <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
@@ -98,3 +98,41 @@
         </div>
     </div>
 </div>
+
+<?php
+if (isset($_GET['acao']) && $_GET['acao'] == 'alterar') {
+    $id_usuario = isset($_GET['idUsuario']) ? $_GET['idUsuario'] : '';
+    if (!empty($id_usuario)) {
+        try {
+            include_once 'src/class/BancoDeDados.php';
+            $banco = new BancodeDados;
+            $sql = 'SELECT * FROM usuarios WHERE id_usuario = ?';
+            $parametros = [$id_usuario];
+            $dados = $banco->consultar($sql, $parametros);
+
+            // Verifica se há dados
+            if (!empty($dados)) {
+                $tipo_usuario = $dados['tipo'] === 'A' ? 'Administrador' : 'Usuário';
+
+                echo "<script>                    
+                    document.addEventListener('DOMContentLoaded', function() {
+                        var modalElement = document.getElementById('adicionar_usuario');
+                        var modal = new bootstrap.Modal(modalElement);
+                        modal.show();
+
+                        document.getElementById('txt_id').value      = '{$dados['id_usuario']}';
+                        document.getElementById('txt_nome').value    = '{$dados['nome']}';
+                        document.getElementById('txt_usuario').value = '{$dados['usuario']}';
+                        document.getElementById('txt_senha').value   = '{$dados['senha']}';
+                        document.getElementById('txt_tipo').value    = '$tipo_usuario';
+                    });
+                </script>";
+            } else {
+                echo "<script>alert('Dados não encontrados.');</script>";
+            }
+        } catch (PDOException $erro) {
+            echo "<script>alert('Erro: " . htmlspecialchars($erro->getMessage(), ENT_QUOTES) . "');</script>";
+        }
+    }
+}
+?>
