@@ -1,7 +1,7 @@
 <?php
 $id_equipamento = isset($_GET['idEquipamento']) ? $_GET['idEquipamento'] : '';
 if (empty($id_equipamento)) {
-    header('LOCATION: ../../index.php?tela=equipamentos');
+    header('LOCATION: ../../index.php?tela=epis');
 }
 try {
     include '../class/BancodeDados.php';
@@ -12,13 +12,13 @@ try {
     echo
     "<script>
         alert('Equipamento removido com sucesso!');
-        window.location = '../../index.php?tela=equipamentos';
+        window.location = '../../index.php?tela=epis';
     </script>";
 } catch (PDOException $erro) {
     $msg = $erro->getMessage();
     echo
     "<script>
         alert(\"$msg\");
-        window.location = '../../index.php?tela=equipamentos';
+        window.location = '../../index.php?tela=epis';
     </script>";
 }

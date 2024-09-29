@@ -105,6 +105,13 @@
                 window.location = 'src/colaboradores/excluir_colaborador.php?idColaborador=' + idColaborador;
             }
         }
+
+        function excluirEquipamento(idEquipamento) {
+            var confirmou = confirm('Deseja realmente exlcuir este EPI?');
+            if (confirmou) {
+                window.location = 'src/epis/excluir_epi.php?idEquipamento=' + idEquipamento;
+            }
+        }
     </script>
 </body>
 

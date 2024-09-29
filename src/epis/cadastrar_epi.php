@@ -22,8 +22,8 @@ try {
             [
                 $formulario['nome'],
                 $formulario['descricao'],
-                $formulario['quantidade_total'],
-                $formulario['quantidade_disponivel']
+                $formulario['qtd_total'],
+                $formulario['qtd_disp']
             ];
         $msg_sucesso = 'Dados cadastrados com sucesso!';
     } else {
@@ -32,8 +32,9 @@ try {
             [
                 $formulario['nome'],
                 $formulario['descricao'],
-                $formulario['quantidade_total'],
-                $formulario['quantidade_disponivel']
+                $formulario['qtd_total'],
+                $formulario['qtd_disp'],
+                $formulario['id']
             ];
         $msg_sucesso = 'Dados alterados com sucesso!';
     }
