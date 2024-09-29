@@ -92,14 +92,10 @@
     <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
-        function abrirModal() {
-            $('#adicionar_usuario').modal('show');
-        }
-
         function excluirUsuario(idUsuario) {
             var confirmou = confirm('Deseja realmente exlcuir este usuário?');
             if (confirmou) {
-                window.location = 'src/usuario/excluir_usuario.php?idUsuario=' + idUsuario;
+                window.location = 'src/usuarios/excluir_usuario.php?idUsuario=' + idUsuario;
             }
         }
 
