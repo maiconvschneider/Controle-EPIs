@@ -12,6 +12,7 @@
                 <th scope="col">ID</th>
                 <th scope="col">Nome</th>
                 <th scope="col">Usuário</th>
+                <th scope="col">Tipo</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
@@ -29,11 +30,12 @@
                             <td>{$linha['id_usuario']}</td>
                             <td>{$linha['nome']}</td>
                             <td>{$linha['usuario']}</td>
+                            <td>{$linha['tipo']}</td>
                             <td>
-                                <a href='sistema.php?tela=usuarios&acao=alterar&idUsuario={$linha['id_usuario']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='#' onclick='atualizar({$linha['id_usuario']})' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
-                                <a href='#' onclick='excluirUsuario({$linha['id_usuario']})' class='btn btn-sm btn-outline-danger'>
+                                <a href='#' onclick='excluir({$linha['id_usuario']})' class='btn btn-sm btn-outline-danger'>
                                     <i class='bi bi-trash'></i>
                                 </a>
                             </td>
@@ -71,19 +73,19 @@
 
                     <div class="form-group mb-3">
                         <label for="txt_nome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" name="txt_nome" id="txt_nome" required style="border-radius: 5px;">
+                        <input type="text" class="form-control" name="txt_nome" id="txt_nome" style="border-radius: 5px;">
                     </div>
                     <div class="form-group mb-3">
                         <label for="txt_usuario" class="form-label">Usuário</label>
-                        <input type="text" class="form-control" name="txt_usuario" id="txt_usuario" required style="border-radius: 5px;">
+                        <input type="text" class="form-control" name="txt_usuario" id="txt_usuario" style="border-radius: 5px;">
                     </div>
                     <div class="form-group mb-3">
                         <label for="txt_senha" class="form-label">Senha</label>
-                        <input type="password" class="form-control" name="txt_senha" id="txt_senha" required style="border-radius: 5px;">
+                        <input type="password" class="form-control" name="txt_senha" id="txt_senha" style="border-radius: 5px;">
                     </div>
                     <div class="form-group mb-3">
                         <label for="txt_tipo" class="form-label">Tipo</label>
-                        <select class="form-control" name="txt_tipo" id="txt_tipo" required style="border-radius: 5px;">
+                        <select class="form-control" name="txt_tipo" id="txt_tipo" style="border-radius: 5px;">
                             <option value=""></option>
                             <option value="Administrador">Administrador</option>
                             <option value="Usuário">Usuário</option>
@@ -92,47 +94,111 @@
                 </div>
                 <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
                     <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;">Salvar</button>
+                    <button class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<?php
-if (isset($_GET['acao']) && $_GET['acao'] == 'alterar') {
-    $id_usuario = isset($_GET['idUsuario']) ? $_GET['idUsuario'] : '';
-    if (!empty($id_usuario)) {
-        try {
-            include_once 'src/class/BancoDeDados.php';
-            $banco = new BancodeDados;
-            $sql = 'SELECT * FROM usuarios WHERE id_usuario = ?';
-            $parametros = [$id_usuario];
-            $dados = $banco->consultar($sql, $parametros);
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $('#form_usuario').submit(function() {
+        return false
+    });
 
-            // Verifica se há dados
-            if (!empty($dados)) {
-                $tipo_usuario = $dados['tipo'] === 'A' ? 'Administrador' : 'Usuário';
+    // Cadastro de Usuário
+    function cadastrar() {
+        var id = document.getElementById('txt_id').value;
+        var nome = document.getElementById('txt_nome').value;
+        var usuario = document.getElementById('txt_usuario').value;
+        var senha = document.getElementById('txt_senha').value;
+        var tipo = (document.getElementById('txt_tipo').value == 'Administrador') ? 'A' : 'U';
 
-                echo "<script>                    
-                    document.addEventListener('DOMContentLoaded', function() {
-                        var modalElement = document.getElementById('adicionar_usuario');
-                        var modal = new bootstrap.Modal(modalElement);
-                        modal.show();
-
-                        document.getElementById('txt_id').value      = '{$dados['id_usuario']}';
-                        document.getElementById('txt_nome').value    = '{$dados['nome']}';
-                        document.getElementById('txt_usuario').value = '{$dados['usuario']}';
-                        document.getElementById('txt_senha').value   = '{$dados['senha']}';
-                        document.getElementById('txt_tipo').value    = '$tipo_usuario';
-                    });
-                </script>";
-            } else {
-                echo "<script>alert('Dados não encontrados.');</script>";
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'src/usuarios/cadastrar_usuario.php',
+            data: {
+                'id': id,
+                'nome': nome,
+                'usuario': usuario,
+                'senha': senha,
+                'tipo': tipo
+            },
+            success: function(retorno) {
+                if (retorno['codigo'] == 2) {
+                    alert('Usuário cadastrado com sucesso!');
+                    window.location.reload();
+                } else if (retorno['codigo'] == 3) {
+                    alert('Usuário atualizado com sucesso!');
+                    window.location.reload();
+                } else {
+                    alert(retorno['mensagem']);
+                }
+            },
+            error: function(erro) {
+                alert('Ocorreu um erro na requisição: ' + erro);
             }
-        } catch (PDOException $erro) {
-            echo "<script>alert('Erro: " . htmlspecialchars($erro->getMessage(), ENT_QUOTES) . "');</script>";
+        });
+    }
+
+    // Atualizar Usuário
+    function atualizar(idUsuario) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'src/usuarios/selecionar_usuario.php',
+            data: {
+                'id_usuario': idUsuario
+            },
+            success: function(retorno) {
+                if (retorno['codigo'] == 2) {
+                    document.getElementById('txt_id').value = retorno['dados']['id_usuario'];
+                    document.getElementById('txt_nome').value = retorno['dados']['nome'];
+                    document.getElementById('txt_usuario').value = retorno['dados']['usuario'];
+                    document.getElementById('txt_senha').value = retorno['dados']['senha'];
+                    document.getElementById('txt_tipo').value = (retorno['dados']['tipo'] == 'A') ? 'Administrador' : 'Usuário';
+
+                    var modal = new bootstrap.Modal(document.getElementById('adicionar_usuario'));
+                    modal.show();
+                } else {
+                    alert(retorno['mensagem']);
+                }
+            },
+            error: function(jqXHR) {
+                console.error(jqXHR); // Mostra o objeto completo no console para depuração
+                let mensagemErro = jqXHR.responseText ? jqXHR.responseText : 'Erro desconhecido';
+                alert('Ocorreu um erro na requisição: ' + mensagemErro);
+            }
+        });
+    }
+
+    // Excluir Usuário
+    function excluir(idUsuario) {
+        var confirmou = confirm('Tem certeza que quer excluir este usuario?');
+        if (confirmou) {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url: 'src/usuarios/excluir_usuario.php',
+                data: {
+                    'id_usuario': idUsuario
+                },
+                success: function(retorno) {
+                    alert(retorno['mensagem']);
+                    if (retorno['codigo'] == 2) {
+                        window.location.reload();
+                    }
+                },
+                error: function(erro) {
+                    alert('Ocorreu um erro na requisição: ' + erro);
+                }
+            });
         }
     }
-}
-?>
+</script>
+</body>
+
+</html>

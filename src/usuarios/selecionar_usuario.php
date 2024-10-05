@@ -10,23 +10,24 @@ if (empty($id_usuario)) {
     exit;
 }
 
-// Banco de dados
+// Continuando
+
 try {
     include '../class/BancoDeDados.php';
     $banco = new BancoDeDados;
-    $sql = 'DELETE FROM usuarios WHERE id_usuario = ?';
+    $sql = 'SELECT * FROM usuarios WHERE id_usuario = ?';
     $parametros = [$id_usuario];
-    $banco->executarComando($sql, $parametros);
+    $dados = $banco->consultar($sql, $parametros);
 
     $resposta = [
         'codigo' => 2,
-        'mensagem' => 'Usuário removido com sucesso!'
+        'dados' => $dados
     ];
     echo json_encode($resposta);
 } catch (PDOException $erro) {
     $resposta = [
         'codigo' => 1,
-        'mensagem' => 'Houve um erro ao tentar remover o usuário.'
+        'mensagem' => 'Houve uma excessão no banco de dados: ' . $erro->getMessage()
     ];
     echo json_encode($resposta);
 }

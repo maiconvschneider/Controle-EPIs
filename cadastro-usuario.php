@@ -53,7 +53,7 @@ if (isset($_SESSION['logado'])) {
       </div>
       <hr>
       <button type="button" class="btn btn-primary w-100 py-2" onclick="cadastrar()">Cadastrar</button>
-      <p class="mt-5 mb-3 text-body-secondary text-center"><a href="login.php">Já tem uma conta? Faça login</a></p>
+      <p class="mt-5 mb-3 text-body-secondary text-center"><a href="index.php">Já tem uma conta? Faça login</a></p>
     </form>
   </main>
 
