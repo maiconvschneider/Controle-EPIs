@@ -4,7 +4,7 @@ $id_usuario = isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
 if (empty($id_usuario)) {
     $resposta = [
         'codigo' => 1,
-        'mensagem' => 'O id do usuário está faltando!'
+        'mensagem' => 'O ID do usuário está faltando!'
     ];
     echo json_encode($resposta);
     exit;

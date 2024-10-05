@@ -167,10 +167,8 @@
                     alert(retorno['mensagem']);
                 }
             },
-            error: function(jqXHR) {
-                console.error(jqXHR); // Mostra o objeto completo no console para depuração
-                let mensagemErro = jqXHR.responseText ? jqXHR.responseText : 'Erro desconhecido';
-                alert('Ocorreu um erro na requisição: ' + mensagemErro);
+            error: function(erro) {
+                alert('Ocorreu um erro na requisição: ' + erro);
             }
         });
     }
@@ -199,6 +197,3 @@
         }
     }
 </script>
-</body>
-
-</html>

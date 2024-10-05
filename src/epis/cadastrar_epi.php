@@ -1,54 +1,48 @@
 <?php
-$formulario['id']         = isset($_POST['txt_id']) ? $_POST['txt_id'] : '';
-$formulario['nome']       = isset($_POST['txt_nome']) ? $_POST['txt_nome'] : '';
-$formulario['descricao']  = isset($_POST['txt_descricao']) ? $_POST['txt_descricao'] : '';
-$formulario['qtd_total']  = isset($_POST['txt_qtd_total']) ? $_POST['txt_qtd_total'] : '';
-$formulario['qtd_disp']   = isset($_POST['txt_qtd_disp']) ? $_POST['txt_qtd_disp'] : '';
+// Validação
+$id = isset($_POST['txt_id']) ? $_POST['txt_id'] : '';
+$nome = isset($_POST['txt_nome']) ? $_POST['txt_nome'] : '';
+$descricao = isset($_POST['txt_descricao']) ? $_POST['txt_descricao'] : '';
+$qtd_total = isset($_POST['txt_qtd_total']) ? $_POST['txt_qtd_total'] : '';
+$qtd_disp = isset($_POST['txt_qtd_disp']) ? $_POST['txt_qtd_disp'] : '';
 
-if (in_array('', $formulario)) {
-    echo
-    "<script>
-        alert('Existem dados faltando! Verifique');
-        window.location = '../sistema.php?tela=equipamentos.php';
-    </script>";
+if (empty($nome) || empty($descricao)) {
+    $resposta = [
+        'codigo' => 1,
+        'mensagem' => 'Por favor, preencha todos os campos!'
+    ];
+    echo json_encode($resposta);
     exit;
 }
+
+// Banco de Dados
 try {
-    include '../class/BancodeDados.php';
-    $banco = new BancodeDados;
-    if ($formulario['id'] == 'NOVO') {
-        $sql = 'INSERT INTO equipamentos (nome, descricao, quantidade_total, quantidade_disponivel) VALUES (?,?,?,?)';
-        $parametros =
-            [
-                $formulario['nome'],
-                $formulario['descricao'],
-                $formulario['qtd_total'],
-                $formulario['qtd_disp']
-            ];
-        $msg_sucesso = 'Dados cadastrados com sucesso!';
+    include '../class/BancoDeDados.php';
+    $banco = new BancoDeDados;
+
+    if ($id == 'NOVO') {
+        $sql = 'INSERT INTO equipamentos (nome, descricao, quantidade_total, quantidade_disponivel) VALUES (?, ?, ?, ?)';
+        $parametros = [$nome, $descricao, $qtd_total, $qtd_disp];
+        $banco->ExecutarComando($sql, $parametros);
+
+        $resposta = [
+            'codigo' => 2,
+        ];
     } else {
         $sql = 'UPDATE equipamentos SET nome = ?, descricao = ?, quantidade_total = ?, quantidade_disponivel = ? WHERE id_equipamento = ?';
-        $parametros =
-            [
-                $formulario['nome'],
-                $formulario['descricao'],
-                $formulario['qtd_total'],
-                $formulario['qtd_disp'],
-                $formulario['id']
-            ];
-        $msg_sucesso = 'Dados alterados com sucesso!';
+        $parametros = [$nome, $descricao, $qtd_total, $qtd_disp, $id];
+        $banco->ExecutarComando($sql, $parametros);
+
+        $resposta = [
+            'codigo' => 3,
+        ];
     }
-    $banco->ExecutarComando($sql, $parametros);
-    echo
-    "<script>
-        alert('$msg_sucesso');
-        window.location = '../../sistema.php?tela=epis';
-    </script>";
+
+    echo json_encode($resposta);
 } catch (PDOException $erro) {
-    $msg = $erro->getMessage();
-    echo
-    "<script>
-        alert(\"$msg\");
-        window.location = '../../sistema.php?tela=epis';
-    </script>";
+    $resposta = [
+        'codigo' => 1,
+        'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
+    ];
+    echo json_encode($resposta);
 }

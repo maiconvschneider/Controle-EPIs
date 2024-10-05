@@ -1,24 +1,32 @@
 <?php
-$id_equipamento = isset($_GET['idEquipamento']) ? $_GET['idEquipamento'] : '';
+// Validação
+$id_equipamento = isset($_POST['id_equipamento']) ? $_POST['id_equipamento'] : '';
 if (empty($id_equipamento)) {
-    header('LOCATION: ../../sistema.php?tela=epis');
+    $resposta = [
+        'codigo' => 1,
+        'mensagem' => 'O ID do equipamento está faltando!'
+    ];
+    echo json_encode($resposta);
+    exit;
 }
+
+// Banco de Dados
 try {
-    include '../class/BancodeDados.php';
-    $banco = new BancodeDados;
+    include '../class/BancoDeDados.php';
+    $banco = new BancoDeDados;
     $sql = 'DELETE FROM equipamentos WHERE id_equipamento = ?';
     $parametros = [$id_equipamento];
     $banco->ExecutarComando($sql, $parametros);
-    echo
-    "<script>
-        alert('Equipamento removido com sucesso!');
-        window.location = '../../sistema.php?tela=epis';
-    </script>";
+
+    $resposta = [
+        'codigo' => 2,
+        'mensagem' => 'Equipamento removido com sucesso!'
+    ];
+    echo json_encode($resposta);
 } catch (PDOException $erro) {
-    $msg = $erro->getMessage();
-    echo
-    "<script>
-        alert(\"$msg\");
-        window.location = '../../sistema.php?tela=epis';
-    </script>";
+    $resposta = [
+        'codigo' => 1,
+        'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
+    ];
+    echo json_encode($resposta);
 }

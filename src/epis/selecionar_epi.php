@@ -1,10 +1,10 @@
 <?php
 // Validação
-$id_usuario = isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
-if (empty($id_usuario)) {
+$id_equipamento = isset($_POST['id_equipamento']) ? $_POST['id_equipamento'] : '';
+if (empty($id_equipamento)) {
     $resposta = [
         'codigo' => 1,
-        'mensagem' => 'O ID do usuário está faltando!'
+        'mensagem' => 'O ID do equipamento está faltando!'
     ];
     echo json_encode($resposta);
     exit;
@@ -13,8 +13,8 @@ if (empty($id_usuario)) {
 try {
     include '../class/BancoDeDados.php';
     $banco = new BancoDeDados;
-    $sql = 'SELECT * FROM usuarios WHERE id_usuario = ?';
-    $parametros = [$id_usuario];
+    $sql = 'SELECT * FROM equipamentos WHERE id_equipamento = ?';
+    $parametros = [$id_equipamento];
     $dados = $banco->consultar($sql, $parametros);
 
     $resposta = [
@@ -25,7 +25,7 @@ try {
 } catch (PDOException $erro) {
     $resposta = [
         'codigo' => 1,
-        'mensagem' => 'Houve uma excessão no banco de dados: ' . $erro->getMessage()
+        'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
     ];
     echo json_encode($resposta);
 }

@@ -34,10 +34,10 @@
                             <td>{$linha['quantidade_total']}</td>
                             <td>{$linha['quantidade_disponivel']}</td>
                             <td>
-                                <a href='sistema.php?tela=epis&acao=alterar&idEquipamento={$linha['id_equipamento']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='#' onclick='atualizar({$linha['id_equipamento']})' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
-                                <a href='#' onclick='excluirEquipamento({$linha['id_equipamento']})' class='btn btn-sm btn-outline-danger'>
+                                <a href='#' onclick='excluir({$linha['id_equipamento']})' class='btn btn-sm btn-outline-danger'>
                                     <i class='bi bi-trash'></i>
                                 </a>
                             </td>
@@ -75,64 +75,125 @@
 
                     <div class="form-group mb-3">
                         <label for="txt_nome" class="form-label">Nome</label>
-                        <input type="text" class="form-control" name="txt_nome" id="txt_nome" required style="border-radius: 5px;">
+                        <input type="text" class="form-control" name="txt_nome" id="txt_nome" style="border-radius: 5px;">
                     </div>
                     <div class="form-group mb-3">
                         <label for="txt_descricao" class="form-label">Descricão</label>
-                        <input type="text" class="form-control" name="txt_descricao" id="txt_descricao" required style="border-radius: 5px;">
+                        <input type="text" class="form-control" name="txt_descricao" id="txt_descricao" style="border-radius: 5px;">
                     </div>
                     <div class="form-group row mb-3">
                         <div class="col-6">
                             <label for="txt_qtd_total" class="form-label">Qtd. Total</label>
-                            <input type="number" class="form-control" name="txt_qtd_total" id="txt_qtd_total" required style="border-radius: 5px;">
+                            <input type="number" class="form-control" name="txt_qtd_total" id="txt_qtd_total" style="border-radius: 5px;">
                         </div>
                         <div class="col-6">
                             <label for="txt_qtd_disp" class="form-label">Qtd. Disponível</label>
-                            <input type="number" class="form-control" name="txt_qtd_disp" id="txt_qtd_disp" required style="border-radius: 5px;">
+                            <input type="number" class="form-control" name="txt_qtd_disp" id="txt_qtd_disp" style="border-radius: 5px;">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
                     <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;">Salvar</button>
+                    <button class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<?php
-if (isset($_GET['acao']) && $_GET['acao'] == 'alterar') {
-    $id_equipamento = isset($_GET['idEquipamento']) ? $_GET['idEquipamento'] : '';
-    if (!empty($id_equipamento)) {
-        try {
-            include_once 'src/class/BancoDeDados.php';
-            $banco = new BancodeDados;
-            $sql = 'SELECT * FROM equipamentos WHERE id_equipamento = ?';
-            $parametros = [$id_equipamento];
-            $dados = $banco->consultar($sql, $parametros);
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $('#form_epi').submit(function() {
+        return false;
+    });
 
-            // Verifica se há dados
-            if (!empty($dados)) {
-                echo "<script>                    
-                    document.addEventListener('DOMContentLoaded', function() {
-                        var modalElement = document.getElementById('adicionar_epi');
-                        var modal = new bootstrap.Modal(modalElement);
-                        modal.show();
+    // Cadastro de Equipamento
+    function cadastrar() {
+        var id = document.getElementById('txt_id').value;
+        var nome = document.getElementById('txt_nome').value;
+        var descricao = document.getElementById('txt_descricao').value;
+        var qtd_total = document.getElementById('txt_qtd_total').value;
+        var qtd_disp = document.getElementById('txt_qtd_disp').value;
 
-                        document.getElementById('txt_id').value        = '{$dados['id_equipamento']}';
-                        document.getElementById('txt_nome').value      = '{$dados['nome']}';
-                        document.getElementById('txt_descricao').value = '{$dados['descricao']}';
-                        document.getElementById('txt_qtd_total').value = '{$dados['quantidade_total']}';
-                        document.getElementById('txt_qtd_disp').value  = '{$dados['quantidade_disponivel']}';
-                    });
-                </script>";
-            } else {
-                echo "<script>alert('Dados não encontrados.');</script>";
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'src/epis/cadastrar_epi.php',
+            data: {
+                'id': id,
+                'nome': nome,
+                'descricao': descricao,
+                'qtd_total': qtd_total,
+                'qtd_disp': qtd_disp
+            },
+            success: function(retorno) {
+                if (retorno['codigo'] == 2) {
+                    alert('Equipamento cadastrado com sucesso!');
+                    window.location.reload();
+                } else if (retorno['codigo'] == 3) {
+                    alert('Equipamento atualizado com sucesso!');
+                    window.location.reload();
+                } else {
+                    alert(retorno['mensagem']);
+                }
+            },
+            error: function(erro) {
+                alert('Ocorreu um erro na requisição: ' + erro);
             }
-        } catch (PDOException $erro) {
-            echo "<script>alert('Erro: " . htmlspecialchars($erro->getMessage(), ENT_QUOTES) . "');</script>";
+        });
+    }
+
+    // Atualizar Equipamento
+    function atualizar(idEquipamento) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'src/epis/selecionar_epi.php',
+            data: {
+                'id_equipamento': idEquipamento
+            },
+            success: function(retorno) {
+                if (retorno['codigo'] == 2) {
+                    document.getElementById('txt_id').value = retorno['dados']['id_equipamento'];
+                    document.getElementById('txt_nome').value = retorno['dados']['nome'];
+                    document.getElementById('txt_descricao').value = retorno['dados']['descricao'];
+                    document.getElementById('txt_qtd_total').value = retorno['dados']['quantidade_total'];
+                    document.getElementById('txt_qtd_disp').value = retorno['dados']['quantidade_disponivel'];
+
+                    var modal = new bootstrap.Modal(document.getElementById('adicionar_epi'));
+                    modal.show();
+                } else {
+                    alert(retorno['mensagem']);
+                }
+            },
+            error: function(erro) {
+                alert('Ocorreu um erro na requisição: ' + erro);
+            }
+        });
+    }
+
+    // Excluir Equipamento
+    function excluir(idEquipamento) {
+        var confirmou = confirm('Tem certeza que quer excluir este equipamento?');
+        if (confirmou) {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url: 'src/epis/excluir_epi.php',
+                data: {
+                    'id_equipamento': idEquipamento
+                },
+                success: function(retorno) {
+                    alert(retorno['mensagem']);
+                    if (retorno['codigo'] == 2) {
+                        window.location.reload();
+                    }
+                },
+                error: function(erro) {
+                    alert('Ocorreu um erro na requisição: ' + erro);
+                }
+            });
         }
     }
-}
-?>
+</script>
