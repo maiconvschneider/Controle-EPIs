@@ -9,7 +9,7 @@ $tipo = isset($_POST['tipo']) ? $_POST['tipo'] : 'U';
 if (empty($nome) || empty($usuario) || empty($senha)) {
     $resposta = [
         'codigo' => 1,
-        'mensagem' => 'Por favor preencha todos os campos!'
+        'mensagem' => 'Por favor, preencha todos os campos!'
     ];
     echo json_encode($resposta);
     exit;

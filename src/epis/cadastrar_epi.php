@@ -1,10 +1,10 @@
 <?php
 // Validação
-$id = isset($_POST['txt_id']) ? $_POST['txt_id'] : '';
-$nome = isset($_POST['txt_nome']) ? $_POST['txt_nome'] : '';
-$descricao = isset($_POST['txt_descricao']) ? $_POST['txt_descricao'] : '';
-$qtd_total = isset($_POST['txt_qtd_total']) ? $_POST['txt_qtd_total'] : '';
-$qtd_disp = isset($_POST['txt_qtd_disp']) ? $_POST['txt_qtd_disp'] : '';
+$id = isset($_POST['id']) ? $_POST['id'] : '';
+$nome = isset($_POST['nome']) ? $_POST['nome'] : '';
+$descricao = isset($_POST['descricao']) ? $_POST['descricao'] : '';
+$qtd_total = isset($_POST['qtd_total']) ? $_POST['qtd_total'] : '0';
+$qtd_disp = isset($_POST['qtd_disp']) ? $_POST['qtd_disp'] : '0';
 
 if (empty($nome) || empty($descricao)) {
     $resposta = [
