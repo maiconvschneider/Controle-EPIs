@@ -30,7 +30,7 @@
                             <td>{$linha['nome']}</td>
                             <td>{$linha['usuario']}</td>
                             <td>
-                                <a href='index.php?tela=usuarios&acao=alterar&idUsuario={$linha['id_usuario']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='sistema.php?tela=usuarios&acao=alterar&idUsuario={$linha['id_usuario']}' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
                                 <a href='#' onclick='excluirUsuario({$linha['id_usuario']})' class='btn btn-sm btn-outline-danger'>

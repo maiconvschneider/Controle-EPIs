@@ -34,7 +34,7 @@
                             <td>{$linha['quantidade_total']}</td>
                             <td>{$linha['quantidade_disponivel']}</td>
                             <td>
-                                <a href='index.php?tela=epis&acao=alterar&idEquipamento={$linha['id_equipamento']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='sistema.php?tela=epis&acao=alterar&idEquipamento={$linha['id_equipamento']}' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
                                 <a href='#' onclick='excluirEquipamento({$linha['id_equipamento']})' class='btn btn-sm btn-outline-danger'>

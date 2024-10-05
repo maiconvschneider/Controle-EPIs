@@ -8,7 +8,7 @@ if (in_array('', $formulario)) {
     echo
     "<script>
         alert('Existem dados faltando! Verifique');
-        window.location = '../index.php?tela=colaboradores.php';
+        window.location = '../sistema.php?tela=colaboradores.php';
     </script>";
     exit;
 }
@@ -41,13 +41,13 @@ try {
     echo
     "<script>
         alert('$msg_sucesso');
-        window.location = '../../index.php?tela=colaboradores';
+        window.location = '../../sistema.php?tela=colaboradores';
     </script>";
 } catch (PDOException $erro) {
     $msg = $erro->getMessage();
     echo
     "<script>
         alert(\"$msg\");
-        window.location = '../../index.php?tela=colaboradores';
+        window.location = '../../sistema.php?tela=colaboradores';
     </script>";
 }

@@ -34,7 +34,7 @@
                             <td>{$linha['departamento']}</td>
                             <td>{$linha['email']}</td>
                             <td>
-                                <a href='index.php?tela=colaboradores&acao=alterar&idColaborador={$linha['id_colaborador']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='sistema.php?tela=colaboradores&acao=alterar&idColaborador={$linha['id_colaborador']}' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
                                 <a href='#' onclick='excluirColaborador({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger'>

@@ -1,7 +1,7 @@
 <?php
 $id_colaborador = isset($_GET['idColaborador']) ? $_GET['idColaborador'] : '';
 if (empty($id_colaborador)) {
-    header('LOCATION: ../../index.php?tela=colaboradores');
+    header('LOCATION: ../../sistema.php?tela=colaboradores');
 }
 try {
     include '../class/BancodeDados.php';
@@ -12,13 +12,13 @@ try {
     echo
     "<script>
         alert('Colaborador removido com sucesso!');
-        window.location = '../../index.php?tela=colaboradores';
+        window.location = '../../sistema.php?tela=colaboradores';
     </script>";
 } catch (PDOException $erro) {
     $msg = $erro->getMessage();
     echo
     "<script>
         alert(\"$msg\");
-        window.location = '../../index.php?tela=colaboradores';
+        window.location = '../../sistema.php?tela=colaboradores';
     </script>";
 }
