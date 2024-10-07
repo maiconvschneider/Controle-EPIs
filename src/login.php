@@ -33,8 +33,10 @@ try {
     $_SESSION['id_usuario'] = $dados_usuario['id_usuario'];
     $_SESSION['nome_usuario'] = $dados_usuario['nome'];
 
-    // Cookies
-    // ...
+    // Definir cookies (opcional)
+    $tempo = time() + (86400); // 1 dia
+    setcookie('id_usuario', $dados_usuario['id_usuario'], $tempo, "/");
+    setcookie('nome_usuario', $dados_usuario['nome'], $tempo, "/");
 
     // Login autenticado com suscesso
     $resposta = [

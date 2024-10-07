@@ -1,3 +1,9 @@
+<?php
+session_start();
+
+$nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'Usuário';
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -88,8 +94,8 @@
 
           default:
             echo '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                            <h1 class="h2"><strong>Bem-vindo ao sistema!</h1>
-                        </div>';
+                    <h1 class="h2"><strong>Bem-vindo ao sistema, ' . $nomeUsuario . '!</strong></h1>
+                  </div>';
             break;
         }
         ?>
