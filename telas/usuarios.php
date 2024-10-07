@@ -63,7 +63,7 @@
 <div id="adicionar_usuario" class="modal fade" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form id="form_usuario" method="post" action="src/usuarios/cadastrar_usuario.php" enctype="multipart/form-data">
+            <form id="form_usuario" method="post" enctype="multipart/form-data">
                 <div class="modal-header" style="background-color: #435d7d; color: #fff;">
                     <h4 class="modal-title">Usuário</h4>
                     <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
@@ -175,7 +175,7 @@
 
     // Excluir Usuário
     function excluir(idUsuario) {
-        var confirmou = confirm('Tem certeza que quer excluir este usuario?');
+        var confirmou = confirm('Você tem certeza que deseja excluir este usuário?');
         if (confirmou) {
             $.ajax({
                 type: 'post',

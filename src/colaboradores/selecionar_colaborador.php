@@ -10,17 +10,16 @@ if (empty($id_colaborador)) {
     exit;
 }
 
-// Banco de Dados
 try {
     include '../class/BancoDeDados.php';
     $banco = new BancoDeDados;
-    $sql = 'DELETE FROM colaboradores WHERE id_colaborador = ?';
+    $sql = 'SELECT * FROM colaboradores WHERE id_colaborador = ?';
     $parametros = [$id_colaborador];
-    $banco->ExecutarComando($sql, $parametros);
+    $dados = $banco->consultar($sql, $parametros);
 
     $resposta = [
         'codigo' => 2,
-        'mensagem' => 'Colaborador removido com sucesso!'
+        'dados' => $dados
     ];
     echo json_encode($resposta);
 } catch (PDOException $erro) {

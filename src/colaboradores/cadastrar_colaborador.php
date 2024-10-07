@@ -1,53 +1,48 @@
 <?php
-$formulario['id']           = isset($_POST['txt_id']) ? $_POST['txt_id'] : '';
-$formulario['nome']         = isset($_POST['txt_nome']) ? $_POST['txt_nome'] : '';
-$formulario['matricula']    = isset($_POST['txt_matricula']) ? $_POST['txt_matricula'] : '';
-$formulario['departamento'] = isset($_POST['txt_departamento']) ? $_POST['txt_departamento'] : '';
-$formulario['email']        = isset($_POST['txt_email']) ? $_POST['txt_email'] : '';
-if (in_array('', $formulario)) {
-    echo
-    "<script>
-        alert('Existem dados faltando! Verifique');
-        window.location = '../sistema.php?tela=colaboradores.php';
-    </script>";
+// Validação
+$id = isset($_POST['id']) ? $_POST['id'] : '';
+$nome = isset($_POST['nome']) ? $_POST['nome'] : '';
+$matricula = isset($_POST['matricula']) ? $_POST['matricula'] : '';
+$departamento = isset($_POST['departamento']) ? $_POST['departamento'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
+
+if (empty($nome) || empty($matricula) || empty($departamento) || empty($email)) {
+    $resposta = [
+        'codigo' => 1,
+        'mensagem' => 'Por favor, preencha todos os campos!'
+    ];
+    echo json_encode($resposta);
     exit;
 }
+
+// Banco de Dados
 try {
-    include '../class/BancodeDados.php';
-    $banco = new BancodeDados;
-    if ($formulario['id'] == 'NOVO') {
-        $sql = 'INSERT INTO colaboradores (nome, matricula, departamento, email) VALUES (?,?,?,?)';
-        $parametros =
-            [
-                $formulario['nome'],
-                $formulario['matricula'],
-                $formulario['departamento'],
-                $formulario['email']
-            ];
-        $msg_sucesso = 'Dados cadastrados com sucesso!';
+    include '../class/BancoDeDados.php';
+    $banco = new BancoDeDados;
+
+    if ($id == 'NOVO') {
+        $sql = 'INSERT INTO colaboradores (nome, matricula, departamento, email) VALUES (?, ?, ?, ?)';
+        $parametros = [$nome, $matricula, $departamento, $email];
+        $banco->ExecutarComando($sql, $parametros);
+
+        $resposta = [
+            'codigo' => 2,
+        ];
     } else {
-        $sql = 'UPDATE colaboradores SET nome = ?, matricula = ?, departamento = ?, email = ?  WHERE id_colaborador = ?';
-        $parametros =
-            [
-                $formulario['nome'],
-                $formulario['matricula'],
-                $formulario['departamento'],
-                $formulario['email'],
-                $formulario['id']
-            ];
-        $msg_sucesso = 'Dados alterados com sucesso!';
+        $sql = 'UPDATE colaboradores SET nome = ?, matricula = ?, departamento = ?, email = ? WHERE id_colaborador = ?';
+        $parametros = [$nome, $matricula, $departamento, $email, $id];
+        $banco->ExecutarComando($sql, $parametros);
+
+        $resposta = [
+            'codigo' => 3,
+        ];
     }
-    $banco->ExecutarComando($sql, $parametros);
-    echo
-    "<script>
-        alert('$msg_sucesso');
-        window.location = '../../sistema.php?tela=colaboradores';
-    </script>";
+
+    echo json_encode($resposta);
 } catch (PDOException $erro) {
-    $msg = $erro->getMessage();
-    echo
-    "<script>
-        alert(\"$msg\");
-        window.location = '../../sistema.php?tela=colaboradores';
-    </script>";
+    $resposta = [
+        'codigo' => 1,
+        'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
+    ];
+    echo json_encode($resposta);
 }

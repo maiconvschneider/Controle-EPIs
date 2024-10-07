@@ -34,10 +34,10 @@
                             <td>{$linha['departamento']}</td>
                             <td>{$linha['email']}</td>
                             <td>
-                                <a href='sistema.php?tela=colaboradores&acao=alterar&idColaborador={$linha['id_colaborador']}' class='btn btn-sm btn-outline-primary'>
+                                <a href='#' onclick='atualizar({$linha['id_colaborador']})' class='btn btn-sm btn-outline-primary'>
                                     <i class='bi bi-pencil'></i>
                                 </a>
-                                <a href='#' onclick='excluirColaborador({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger'>
+                                <a href='#' onclick='excluir({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger'>
                                     <i class='bi bi-trash'></i>
                                 </a>
                             </td>
@@ -65,7 +65,7 @@
 <div id="adicionar_colaborador" class="modal fade" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <form id="form_colaborador" method="post" action="src/colaboradores/cadastrar_colaborador.php" enctype="multipart/form-data">
+            <form id="form_colaborador" method="post" enctype="multipart/form-data">
                 <div class="modal-header" style="background-color: #435d7d; color: #fff;">
                     <h4 class="modal-title">Colaborador</h4>
                     <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
@@ -92,45 +92,106 @@
                 </div>
                 <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
                     <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="submit" class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;">Salvar</button>
+                    <button class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<?php
-if (isset($_GET['acao']) && $_GET['acao'] == 'alterar') {
-    $id_colaborador = isset($_GET['idColaborador']) ? $_GET['idColaborador'] : '';
-    if (!empty($id_colaborador)) {
-        try {
-            include_once 'src/class/BancoDeDados.php';
-            $banco = new BancodeDados;
-            $sql = 'SELECT * FROM colaboradores WHERE id_colaborador = ?';
-            $parametros = [$id_colaborador];
-            $dados = $banco->consultar($sql, $parametros);
+<!-- JQuery -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $('#form_colaborador').submit(function() {
+        return false;
+    });
 
-            // Verifica se há dados
-            if (!empty($dados)) {
-                echo "<script>                    
-                    document.addEventListener('DOMContentLoaded', function() {
-                        var modalElement = document.getElementById('adicionar_colaborador');
-                        var modal = new bootstrap.Modal(modalElement);
-                        modal.show();
+    // Cadastro de Colaborador
+    function cadastrar() {
+        var id = document.getElementById('txt_id').value;
+        var nome = document.getElementById('txt_nome').value;
+        var matricula = document.getElementById('txt_matricula').value;
+        var departamento = document.getElementById('txt_departamento').value;
+        var email = document.getElementById('txt_email').value;
 
-                        document.getElementById('txt_id').value           = '{$dados['id_colaborador']}';
-                        document.getElementById('txt_nome').value         = '{$dados['nome']}';
-                        document.getElementById('txt_matricula').value    = '{$dados['matricula']}';
-                        document.getElementById('txt_departamento').value = '{$dados['departamento']}';
-                        document.getElementById('txt_email').value        = '{$dados['email']}';
-                    });
-                </script>";
-            } else {
-                echo "<script>alert('Dados não encontrados.');</script>";
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'src/colaboradores/cadastrar_colaborador.php',
+            data: {
+                'id': id,
+                'nome': nome,
+                'matricula': matricula,
+                'departamento': departamento,
+                'email': email
+            },
+            success: function(retorno) {
+                if (retorno['codigo'] == 2) {
+                    alert('Colaborador cadastrado com sucesso!');
+                    window.location.reload();
+                } else if (retorno['codigo'] == 3) {
+                    alert('Colaborador atualizado com sucesso!');
+                    window.location.reload();
+                } else {
+                    alert(retorno['mensagem']);
+                }
+            },
+            error: function(erro) {
+                alert('Ocorreu um erro na requisição: ' + erro);
             }
-        } catch (PDOException $erro) {
-            echo "<script>alert('Erro: " . htmlspecialchars($erro->getMessage(), ENT_QUOTES) . "');</script>";
+        });
+    }
+
+    // Atualizar Colaborador
+    function atualizar(idColaborador) {
+        $.ajax({
+            type: 'post',
+            dataType: 'json',
+            url: 'src/colaboradores/selecionar_colaborador.php',
+            data: {
+                'id_colaborador': idColaborador
+            },
+            success: function(retorno) {
+                if (retorno['codigo'] == 2) {
+                    document.getElementById('txt_id').value = retorno['dados']['id_colaborador'];
+                    document.getElementById('txt_nome').value = retorno['dados']['nome'];
+                    document.getElementById('txt_matricula').value = retorno['dados']['matricula'];
+                    document.getElementById('txt_departamento').value = retorno['dados']['departamento'];
+                    document.getElementById('txt_email').value = retorno['dados']['email'];
+
+                    var modal = new bootstrap.Modal(document.getElementById('adicionar_colaborador'));
+                    modal.show();
+                } else {
+                    alert(retorno['mensagem']);
+                }
+            },
+            error: function(erro) {
+                alert('Ocorreu um erro na requisição: ' + erro);
+            }
+        });
+    }
+
+    // Excluir Colaborador
+    function excluir(idColaborador) {
+        var confirmou = confirm('Você tem certeza que deseja excluir este colaborador?');
+        if (confirmou) {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url: 'src/colaboradores/excluir_colaborador.php',
+                data: {
+                    'id_colaborador': idColaborador
+                },
+                success: function(retorno) {
+                    alert(retorno['mensagem']);
+                    if (retorno['codigo'] == 2) {
+                        window.location.reload();
+                    }
+                },
+                error: function(erro) {
+                    alert('Ocorreu um erro na requisição: ' + erro);
+                }
+            });
         }
     }
-}
-?>
+</script>
