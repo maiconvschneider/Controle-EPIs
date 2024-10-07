@@ -35,7 +35,7 @@ try {
     $_SESSION['nome_usuario'] = $dados_usuario['nome'];
     $_SESSION['data_hora_login'] = date('d/m/Y H:i:s');
 
-    // Definir cookies (opcional)
+    // Definir cookies
     $tempo = time() + (86400); // 1 dia
     setcookie('id_usuario', $dados_usuario['id_usuario'], $tempo, "/");
     setcookie('nome_usuario', $dados_usuario['nome'], $tempo, "/");

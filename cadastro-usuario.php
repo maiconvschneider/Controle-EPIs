@@ -68,7 +68,7 @@ if (isset($_SESSION['logado'])) {
       $.ajax({
         type: 'post',
         dataType: 'json',
-        url: 'src/cadastrar.php',
+        url: 'src/usuarios/cadastrar_usuario.php',
         data: {
           'nome': nome,
           'usuario': usuario,
@@ -77,7 +77,7 @@ if (isset($_SESSION['logado'])) {
         success: function(retorno) {
           if (retorno['codigo'] == 2) {
             alert('Usuário cadastrado com sucesso!');
-            window.location = 'index.php';
+            window.location = '../index.php';
           } else {
             alert(retorno['mensagem']);
           }
