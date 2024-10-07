@@ -32,7 +32,7 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
     <div class="row">
       <div class="sidebar col-md-3 col-lg-2 p-0 bg-light border-end shadow-sm" style="height: 100vh;">
         <div class="offcanvas-md offcanvas-end bg-light" tabindex="-1" id="sidebarMenu">
-          <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
+          <div class="offcanvas-body d-flex flex-column p-0 pt-lg-3 overflow-y-auto" style="height: 100vh;">
             <ul class="nav flex-column">
               <li class="nav-item">
                 <a class="nav-link d-flex align-items-center gap-2" href="sistema.php" style="padding: 15px; font-weight: 500;">
@@ -68,6 +68,10 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
                 </a>
               </li>
             </ul>
+            <div class="footer text-center mt-auto p-3">
+              <h5><?php echo $nomeUsuario; ?></h5>
+              <p><?php echo isset($_SESSION['data_hora_login']) ? $_SESSION['data_hora_login'] : ''; ?></p>
+            </div>
           </div>
         </div>
       </div>
@@ -94,7 +98,7 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
 
           default:
             echo '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2"><strong>Bem-vindo ao sistema, ' . $nomeUsuario . '!</strong></h1>
+                    <h1 class>Bem-vindo ao sistema, ' . $nomeUsuario . '!</h1>
                   </div>';
             break;
         }

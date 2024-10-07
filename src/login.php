@@ -29,9 +29,11 @@ try {
   if ($dados_usuario) {
     // Sessão
     session_start();
+    date_default_timezone_set('America/Sao_Paulo');
     $_SESSION['logado'] = true;
     $_SESSION['id_usuario'] = $dados_usuario['id_usuario'];
     $_SESSION['nome_usuario'] = $dados_usuario['nome'];
+    $_SESSION['data_hora_login'] = date('d/m/Y H:i:s');
 
     // Definir cookies (opcional)
     $tempo = time() + (86400); // 1 dia
