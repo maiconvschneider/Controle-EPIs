@@ -11,7 +11,7 @@
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nome</th>
-                <th scope="col">Descricão</th>
+                <th scope="col">Descrição</th>
                 <th scope="col">Qtd Total</th>
                 <th scope="col">Qtd Disponível</th>
                 <th scope="col">Ações</th>
@@ -67,7 +67,7 @@
         <div class="modal-content">
             <form id="form_epi" method="post" enctype="multipart/form-data">
                 <div class="modal-header" style="background-color: #435d7d; color: #fff;">
-                    <h4 class="modal-title">Usuário</h4>
+                    <h4 class="modal-title">Equipamento</h4>
                     <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
                 </div>
                 <div class="modal-body" style="padding: 20px;">
@@ -78,7 +78,7 @@
                         <input type="text" class="form-control" name="txt_nome" id="txt_nome" style="border-radius: 5px;">
                     </div>
                     <div class="form-group mb-3">
-                        <label for="txt_descricao" class="form-label">Descricão</label>
+                        <label for="txt_descricao" class="form-label">Descrição</label>
                         <input type="text" class="form-control" name="txt_descricao" id="txt_descricao" style="border-radius: 5px;">
                     </div>
                     <div class="form-group row mb-3">
@@ -94,7 +94,7 @@
                 </div>
                 <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
                     <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
-                    <button class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
+                    <button class="btn btn-success" id="btn_salvar" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
                 </div>
             </form>
         </div>
@@ -196,4 +196,28 @@
             });
         }
     }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const btnSalvar = document.querySelector("#btn_salvar");
+
+        function validaQtd() {
+            const qtdTotal = parseInt(document.getElementById("txt_qtd_total").value) || 0;
+            const qtdDisp = parseInt(document.getElementById("txt_qtd_disp").value) || 0;
+
+            if (qtdDisp > qtdTotal) {
+                document.getElementById("txt_qtd_disp").setCustomValidity("A quantidade disponível não pode ser maior que a quantidade total.");
+                document.getElementById("txt_qtd_disp").reportValidity();
+                btnSalvar.disabled = true;
+            } else {
+                document.getElementById("txt_qtd_disp").setCustomValidity("");
+                btnSalvar.disabled = false;
+            }
+        }
+
+        // Adiciona eventos para validar quando o valor é alterado
+        document.getElementById("txt_qtd_total").addEventListener("input", validaQtd);
+        document.getElementById("txt_qtd_disp").addEventListener("input", validaQtd);
+    });
 </script>
