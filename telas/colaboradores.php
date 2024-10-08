@@ -185,7 +185,7 @@
         success: function(retorno) {
           alert(retorno['mensagem']);
           if (retorno['codigo'] == 2) {
-            registrarLog('Exclusão de colaborador - ID: ' + idColaborador);
+            registrarLog('Exclusão de Colaborador - ID: ' + idColaborador);
             window.location.reload();
           }
         },

@@ -187,6 +187,7 @@
         success: function(retorno) {
           alert(retorno['mensagem']);
           if (retorno['codigo'] == 2) {
+            registrarLog('Exclusão de Equipamento - ID: ' + idEquipamento);
             window.location.reload();
           }
         },
@@ -195,6 +196,21 @@
         }
       });
     }
+  }
+
+  // Adicionar Logs
+  function registrarLog(acao) {
+    $.ajax({
+      type: 'post',
+      dataType: 'json',
+      url: 'src/logs.php',
+      data: {
+        'acao': acao
+      },
+      error: function(erro) {
+        alert('Ocorreu um erro na requisição: ' + erro);
+      }
+    });
   }
 </script>
 
