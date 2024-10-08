@@ -27,6 +27,7 @@ try {
 
     $resposta = [
       'codigo' => 2,
+      'mensagem' => 'Usuário cadastrado com sucesso!'
     ];
   } else {
     $sql = 'UPDATE usuarios SET nome = ?, usuario = ?, senha = ?, tipo = ? WHERE id_usuario = ?';
@@ -35,6 +36,7 @@ try {
 
     $resposta = [
       'codigo' => 3,
+      'mensagem' => 'Usuário atualizado com sucesso!'
     ];
   }
 

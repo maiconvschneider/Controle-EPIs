@@ -185,7 +185,7 @@
         success: function(retorno) {
           alert(retorno['mensagem']);
           if (retorno['codigo'] == 2) {
-            Log('Exclusão do colaborador ' + idColaborador);
+            registrarLog('Exclusão de colaborador - ID: ' + idColaborador);
             window.location.reload();
           }
         },
@@ -197,7 +197,7 @@
   }
 
   // Adicionar Logs
-  function Log(acao) {
+  function registrarLog(acao) {
     $.ajax({
       type: 'post',
       dataType: 'json',

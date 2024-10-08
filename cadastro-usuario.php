@@ -70,14 +70,15 @@ if (isset($_SESSION['logado'])) {
         dataType: 'json',
         url: 'src/usuarios/cadastrar_usuario.php',
         data: {
+          'id': 'NOVO',
           'nome': nome,
           'usuario': usuario,
           'senha': senha
         },
         success: function(retorno) {
           if (retorno['codigo'] == 2) {
-            alert('Usuário cadastrado com sucesso!');
-            window.location = '../index.php';
+            alert(retorno['mensagem']);
+            window.location = 'index.php';
           } else {
             alert(retorno['mensagem']);
           }
