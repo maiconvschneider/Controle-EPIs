@@ -27,32 +27,32 @@
           foreach ($dados as $linha) {
             echo
             "<tr'>
-                            <td>{$linha['id_usuario']}</td>
-                            <td>{$linha['nome']}</td>
-                            <td>{$linha['usuario']}</td>
-                            <td>{$linha['tipo']}</td>
-                            <td>
-                                <a href='#' onclick='atualizar({$linha['id_usuario']})' class='btn btn-sm btn-outline-primary'>
-                                    <i class='bi bi-pencil'></i>
-                                </a>
-                                <a href='#' onclick='excluir({$linha['id_usuario']})' class='btn btn-sm btn-outline-danger'>
-                                    <i class='bi bi-trash'></i>
-                                </a>
-                            </td>
-                        </tr>";
+              <td>{$linha['id_usuario']}</td>
+              <td>{$linha['nome']}</td>
+              <td>{$linha['usuario']}</td>
+              <td>{$linha['tipo']}</td>
+              <td>
+                <a href='#' onclick='atualizar({$linha['id_usuario']})' class='btn btn-sm btn-outline-primary'>
+                  <i class='bi bi-pencil'></i>
+                </a>
+                <a href='#' onclick='excluir({$linha['id_usuario']})' class='btn btn-sm btn-outline-danger'>
+                  <i class='bi bi-trash'></i>
+                </a>
+              </td>
+            </tr>";
           }
         } else {
           echo
           "<tr>
-                        <td colspan = '6' class='text-center'> Nenhum usuário cadastrado...</td>
-                    </tr>";
+            <td colspan = '6' class='text-center'> Nenhum usuário cadastrado...</td>
+          </tr>";
         }
       } catch (PDOException $erro) {
         $msg = $erro->getMessage();
         echo
         "<script>
-                    alert(\"$msg\");
-                </script>";
+          alert(\"$msg\");
+        </script>";
       }
       ?>
     </tbody>

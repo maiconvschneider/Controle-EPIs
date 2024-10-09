@@ -29,19 +29,19 @@
           foreach ($dados as $linha) {
             echo
             "<tr'>
-                <td>{$linha['id_emprestimo']}</td>
-                <td>{$linha['colaborador']}</td>
-                <td>{$linha['data_emprestimo']}</td>
-                <td>{$linha['data_devolucao']}</td>
-                <td>{$linha['status']}</td>                
-                <td>
-                    <a href='#' onclick='devolver({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-primary'>
-                      <i class='bi bi-arrow-repeat'></i>
-                    </a>
-                    <a href='#' onclick='excluir({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-danger'>
-                      <i class='bi bi-trash'></i>
-                    </a>
-                </td>
+              <td>{$linha['id_emprestimo']}</td>
+              <td>{$linha['colaborador']}</td>
+              <td>{$linha['data_emprestimo']}</td>
+              <td>{$linha['data_devolucao']}</td>
+              <td>{$linha['status']}</td>                
+              <td>
+                <a href='#' onclick='devolver({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-primary'>
+                  <i class='bi bi-arrow-repeat'></i>
+                </a>
+                <a href='#' onclick='excluir({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-danger'>
+                  <i class='bi bi-trash'></i>
+                </a>
+              </td>
             </tr>";
           }
         } else {
@@ -87,7 +87,7 @@
               <label for="txt_status" class="form-label">Status</label>
               <select class="form-control" name="txt_status" id="txt_status" style="border-radius: 5px;">
                 <option value=""></option>
-                <option value="Pendente">Pendente</option>
+                <option value="Pendente">Aberto</option>
                 <option value="Emprestado">Emprestado</option>
                 <option value="Devolvido">Devolvido</option>
               </select>
