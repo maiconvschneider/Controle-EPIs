@@ -14,7 +14,7 @@ if (empty($id_departamento)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'DELETE FROM departamentos WHERE id_departamento = ?';
+  $sql = 'UPDATE departamentos set ativo = 0 WHERE id_departamento = ?';
   $parametros = [$id_departamento];
   $banco->executarComando($sql, $parametros);
 

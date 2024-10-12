@@ -20,7 +20,7 @@
       try {
         include_once 'src/class/BancodeDados.php';
         $banco = new BancodeDados;
-        $sql = 'SELECT * FROM departamentos';
+        $sql = 'SELECT * FROM departamentos WHERE ativo = 1';
         $dados = $banco->Consultar($sql, [], true);
         if ($dados) {
           foreach ($dados as $linha) {
