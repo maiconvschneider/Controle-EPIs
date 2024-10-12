@@ -45,6 +45,11 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
                 </a>
               </li>
               <li class="nav-item">
+                <a class="nav-link d-flex align-items-center gap-2" href="sistema.php?tela=departamentos" style="padding: 15px; font-weight: 500;">
+                  <i class="bi bi-grid"></i> Departamentos
+                </a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link d-flex align-items-center gap-2" href="sistema.php?tela=colaboradores" style="padding: 15px; font-weight: 500;">
                   <i class="bi bi-person-badge"></i> Colaboradores
                 </a>
@@ -69,6 +74,7 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
               </li>
             </ul>
             <div class="footer text-center mt-auto p-3">
+              <hr>
               <h5><?php echo $nomeUsuario; ?></h5>
               <p><?php echo isset($_SESSION['data_hora_login']) ? $_SESSION['data_hora_login'] : ''; ?></p>
             </div>
@@ -82,6 +88,10 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
         switch ($tela) {
           case 'usuarios':
             include 'telas/usuarios.php';
+            break;
+
+          case 'departamentos':
+            include 'telas/departamentos.php';
             break;
 
           case 'colaboradores':
@@ -110,27 +120,6 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
   <!-- JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
-    function excluirUsuario(idUsuario) {
-      var confirmou = confirm('Deseja realmente exlcuir este usuário?');
-      if (confirmou) {
-        window.location = 'src/usuarios/excluir_usuario.php?idUsuario=' + idUsuario;
-      }
-    }
-
-    function excluirColaborador(idColaborador) {
-      var confirmou = confirm('Deseja realmente exlcuir este colaborador?');
-      if (confirmou) {
-        window.location = 'src/colaboradores/excluir_colaborador.php?idColaborador=' + idColaborador;
-      }
-    }
-
-    function excluirEquipamento(idEquipamento) {
-      var confirmou = confirm('Deseja realmente exlcuir este EPI?');
-      if (confirmou) {
-        window.location = 'src/epis/excluir_epi.php?idEquipamento=' + idEquipamento;
-      }
-    }
-
     function sair() {
       var confirmou = confirm('Deseja realmente sair do sistema?');
       if (confirmou) {
