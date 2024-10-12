@@ -13,9 +13,10 @@ if (empty($id_colaborador)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'SELECT c.*, ce.cep, ce.endereco, ce.bairro, ce.numero, ce.cidade, ce.uf, ce.complemento 
+  $sql = 'SELECT c.*, d.nome as departamento, ce.cep, ce.endereco, ce.bairro, ce.numero, ce.cidade, ce.uf, ce.complemento 
           FROM db_epis.colaboradores c 
-          LEFT JOIN db_epis.colaboradores_endereco ce on ce.id_colaborador = c.id_colaborador 
+          LEFT JOIN db_epis.colaboradores_endereco ce on ce.id_colaborador = c.id_colaborador
+          LEFT JOIN db_epis.departamentos d on d.id_departamento = c.id_departamento 
           WHERE c.id_colaborador = ?';
   $parametros = [$id_colaborador];
   $dados = $banco->consultar($sql, $parametros);

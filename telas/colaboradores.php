@@ -22,7 +22,10 @@
       try {
         include_once 'src/class/BancodeDados.php';
         $banco = new BancodeDados;
-        $sql = 'SELECT * FROM colaboradores where ativo <> 0';
+        $sql = 'SELECT c.*, d.nome as departamento 
+                FROM colaboradores c 
+                LEFT JOIN departamentos d on d.id_departamento = c.id_departamento 
+                WHERE ativo <> 0';
         $dados = $banco->Consultar($sql, [], true);
         if ($dados) {
           foreach ($dados as $linha) {
@@ -98,8 +101,32 @@
               </div>
               <div class="form-group row mb-3">
                 <div class="col-6">
-                  <label for="txt_departamento" class="form-label">Departamento</label>
-                  <input type="text" class="form-control" name="txt_departamento" id="txt_departamento" required style="border-radius: 5px;">
+                  <label for="list_departamento" class="form-label">Departamento</label>
+                  <select class="form-select" name="list_departamento" id="list_departamento" required style="border-radius: 5px;">
+                    <option value="">Escolha o departamento</option>
+                    <?php
+                    function getDepartamentos()
+                    {
+                      include_once 'src/class/BancodeDados.php';
+                      $banco = new BancodeDados();
+
+                      $sql = 'SELECT id_departamento, nome FROM departamentos';
+                      $departamentos = $banco->Consultar($sql, [], true);
+
+                      return $departamentos;
+                    }
+
+                    $departamentos = getDepartamentos();
+                    if ($departamentos) {
+                      foreach ($departamentos as $departamento) {
+                        $id_departamento = $departamento['id_departamento'];
+                        $nome = $departamento['nome'];
+
+                        echo "<option value='$id_departamento'>$nome</option>";
+                      }
+                    }
+                    ?>
+                  </select>
                 </div>
                 <div class="col-6">
                   <label for="txt_email" class="form-label">Email</label>
@@ -261,7 +288,7 @@
     var id = document.getElementById('txt_id').value;
     var nome = document.getElementById('txt_nome').value;
     var matricula = document.getElementById('txt_matricula').value;
-    var departamento = document.getElementById('txt_departamento').value;
+    var departamento = document.getElementById('list_departamento').value;
     var email = document.getElementById('txt_email').value;
     var cep = document.getElementById('txt_cep').value;
     var rua = document.getElementById('txt_rua').value;
@@ -328,7 +355,7 @@
           document.getElementById('txt_id').value = retorno['dados']['id_colaborador'];
           document.getElementById('txt_nome').value = retorno['dados']['nome'];
           document.getElementById('txt_matricula').value = retorno['dados']['matricula'];
-          document.getElementById('txt_departamento').value = retorno['dados']['departamento'];
+          document.getElementById('list_departamento').value = retorno['dados']['id_departamento'];
           document.getElementById('txt_email').value = retorno['dados']['email'];
           document.getElementById('txt_cep').value = retorno['dados']['cep'];
           document.getElementById('txt_rua').value = retorno['dados']['endereco'];
