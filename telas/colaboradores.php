@@ -85,7 +85,7 @@
           <!-- Dados Pessoais -->
           <div class="tab-pane fade show active" id="dados-pessoais">
             <div class="modal-body" style="padding: 20px;">
-              <input type="text" name="txt_id" id="txt_id" value="NOVO">
+              <input type="hidden" name="txt_id" id="txt_id" value="NOVO">
               <div class="form-group row mb-3">
                 <div class="col-8">
                   <label for="txt_nome" class="form-label">Nome</label>
