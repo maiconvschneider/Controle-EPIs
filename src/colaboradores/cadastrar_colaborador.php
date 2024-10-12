@@ -6,6 +6,15 @@ $matricula = isset($_POST['matricula']) ? $_POST['matricula'] : '';
 $departamento = isset($_POST['departamento']) ? $_POST['departamento'] : '';
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 
+// Endereço
+$cep = isset($_POST['cep']) ? $_POST['cep'] : '';
+$endereco = isset($_POST['rua']) ? $_POST['rua'] : '';
+$numero = isset($_POST['numero']) ? $_POST['numero'] : '';
+$complemento = isset($_POST['complemento']) ? $_POST['complemento'] : '';
+$bairro = isset($_POST['bairro']) ? $_POST['bairro'] : '';
+$uf = isset($_POST['uf']) ? $_POST['uf'] : '';
+$cidade = isset($_POST['cidade']) ? $_POST['cidade'] : '';
+
 if (empty($nome) || empty($matricula) || empty($departamento) || empty($email)) {
   $resposta = [
     'codigo' => 1,
@@ -15,27 +24,49 @@ if (empty($nome) || empty($matricula) || empty($departamento) || empty($email)) 
   exit;
 }
 
-// Banco de Dados
+if (!empty($cep) || !empty($endereco) || !empty($bairro) || !empty($uf) || !empty($cidade) || !empty($numero) || !empty($complemento)) {
+  $preencheu_endereco = true;
+} else {
+  $preencheu_endereco = false;
+}
+
+// Conexão com o banco de dados
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
 
-  if ($id == 'NOVO') {
+  if ($id == 'NOVO') { // Cadastrar
     $sql = 'INSERT INTO colaboradores (nome, matricula, departamento, email) VALUES (?, ?, ?, ?)';
     $parametros = [$nome, $matricula, $departamento, $email];
     $banco->ExecutarComando($sql, $parametros);
 
-    $resposta = [
-      'codigo' => 2,
-    ];
-  } else {
+    // Pegar o ID do colaborador cadastrado
+    $id_colaborador = $banco->conexao->lastInsertId();
+
+    $resposta = ['codigo' => 2];
+  } else { // Atualizar
     $sql = 'UPDATE colaboradores SET nome = ?, matricula = ?, departamento = ?, email = ? WHERE id_colaborador = ?';
     $parametros = [$nome, $matricula, $departamento, $email, $id];
     $banco->ExecutarComando($sql, $parametros);
 
-    $resposta = [
-      'codigo' => 3,
-    ];
+    $id_colaborador = $id;
+    $resposta = ['codigo' => 3];
+  }
+
+  // verificar se o colaborador já tem um endereço cadastrado
+  $sql = 'SELECT COUNT(*) AS total_endereco FROM colaboradores_endereco WHERE id_colaborador = ?';
+  $parametros = [$id_colaborador];
+  $resultado = $banco->Consultar($sql, $parametros);
+  $existe_endereco = $resultado['total_endereco'] > 0;
+
+  if ($existe_endereco) { // Atualizar endereço
+    $sql = 'UPDATE colaboradores_endereco SET cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, uf = ?, cidade = ? WHERE id_colaborador = ?';
+    $parametros = [$cep, $endereco, $numero, $complemento, $bairro, $uf, $cidade, $id_colaborador];
+    $banco->ExecutarComando($sql, $parametros);
+  } else if ($preencheu_endereco) {
+    $sql = 'INSERT INTO colaboradores_endereco (id_colaborador, cep, endereco, numero, complemento, bairro, uf, cidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    $parametros = [$id_colaborador, $cep, $endereco, $numero, $complemento, $bairro, $uf, $cidade];
+    $banco->ExecutarComando($sql, $parametros);
   }
 
   echo json_encode($resposta);

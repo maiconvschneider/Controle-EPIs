@@ -14,7 +14,7 @@ if (empty($id_colaborador)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'DELETE FROM colaboradores WHERE id_colaborador = ?';
+  $sql = 'update colaboradores set ativo = 0 WHERE id_colaborador = ?';
   $parametros = [$id_colaborador];
   $banco->ExecutarComando($sql, $parametros);
 

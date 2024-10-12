@@ -1,7 +1,7 @@
 <?php
 class BancodeDados
 {
-  private $conexao;
+  public $conexao;
 
   function __construct()
   {
