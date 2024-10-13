@@ -25,7 +25,7 @@
         $sql = 'SELECT c.*, d.nome as departamento 
                 FROM colaboradores c 
                 LEFT JOIN departamentos d on d.id_departamento = c.id_departamento 
-                WHERE ativo <> 0';
+                WHERE c.ativo = 1';
         $dados = $banco->Consultar($sql, [], true);
         if ($dados) {
           foreach ($dados as $linha) {

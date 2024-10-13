@@ -22,7 +22,7 @@
       try {
         include_once 'src/class/BancodeDados.php';
         $banco = new BancodeDados;
-        $sql = 'SELECT * FROM equipamentos';
+        $sql = 'SELECT * FROM equipamentos where ativo = 1';
         $dados = $banco->Consultar($sql, [], true);
         if ($dados) {
           foreach ($dados as $linha) {

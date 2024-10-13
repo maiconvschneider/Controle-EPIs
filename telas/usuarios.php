@@ -21,7 +21,12 @@
       try {
         include_once 'src/class/BancodeDados.php';
         $banco = new BancodeDados;
-        $sql = 'SELECT * FROM usuarios';
+        $sql = "SELECT u.*,
+                CASE WHEN u.tipo = 'U' THEN 'Usuário'
+                     WHEN u.tipo = 'A' THEN 'Administrador'
+                END AS tipo_extenso
+                FROM usuarios u
+                WHERE ativo = 1";
         $dados = $banco->Consultar($sql, [], true);
         if ($dados) {
           foreach ($dados as $linha) {
@@ -30,7 +35,7 @@
               <td>{$linha['id_usuario']}</td>
               <td>{$linha['nome']}</td>
               <td>{$linha['usuario']}</td>
-              <td>{$linha['tipo']}</td>
+              <td>{$linha['tipo_extenso']}</td>
               <td>
                 <a href='#' onclick='atualizar({$linha['id_usuario']})' class='btn btn-sm btn-outline-primary'>
                   <i class='bi bi-pencil'></i>
