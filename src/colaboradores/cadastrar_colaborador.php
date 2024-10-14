@@ -24,6 +24,17 @@ if (empty($nome) || empty($matricula) || empty($id_departamento) || empty($email
   exit;
 }
 
+// Verifica se o email é válido (by stack overflow)
+// https://pt.stackoverflow.com/questions/8134/verificar-se-variável-contém-um-endereço-de-email-bem-formatado-em-php
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+  $resposta = [
+    'codigo' => 1,
+    'mensagem' => 'Por favor, insira um email válido!'
+  ];
+  echo json_encode($resposta);
+  exit;
+}
+
 if (!empty($cep) || !empty($endereco) || !empty($bairro) || !empty($uf) || !empty($cidade) || !empty($numero) || !empty($complemento)) {
   $preencheu_endereco = true;
 } else {

@@ -110,7 +110,9 @@
                       include_once 'src/class/BancodeDados.php';
                       $banco = new BancodeDados();
 
-                      $sql = 'SELECT id_departamento, nome FROM departamentos';
+                      $sql = 'SELECT id_departamento, nome 
+                              FROM departamentos 
+                              WHERE ativo = 1';
                       $departamentos = $banco->Consultar($sql, [], true);
 
                       return $departamentos;
