@@ -3,7 +3,8 @@
 session_start();
 session_destroy();
 
-setcookie('usuario', '', time() - 3600, "/");
+// Remover cookies
+setcookie('id_usuario', '', time() - 3600, "/");
 setcookie('nome_usuario', '', time() - 3600, "/");
 
 // Redirecionar

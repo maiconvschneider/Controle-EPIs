@@ -24,7 +24,7 @@ if (isset($_SESSION['logado'])) {
       background-color: #f8f9fa;
     }
 
-    .form-signin {
+    .form-cadastro {
       width: 100%;
       max-width: 400px;
       padding: 20px;
@@ -36,7 +36,7 @@ if (isset($_SESSION['logado'])) {
 </head>
 
 <body>
-  <main class="form-signin">
+  <main class="form-cadastro">
     <form id="form-login">
       <h1 class="h3 mb-3 fw-normal">Login</h1>
       <div class="form-floating">
@@ -48,7 +48,7 @@ if (isset($_SESSION['logado'])) {
         <label for="txt_senha">Senha</label>
       </div>
       <div class="form-check text-start my-3">
-        <input class="form-check-input" type="checkbox" value="true" id="check_lembrar">
+        <input class="form-check-input" type="checkbox" id="check_lembrar">
         <label class="form-check-label" for="check_lembrar">Manter-me conectado</label>
       </div>
       <button type="button" class="btn btn-primary w-100 py-2" onclick="entrar()">Entrar</button>
@@ -73,6 +73,7 @@ if (isset($_SESSION['logado'])) {
     function entrar() {
       var usuario = document.getElementById('txt_usuario').value;
       var senha = document.getElementById('txt_senha').value;
+      var lembrar = document.getElementById('check_lembrar').checked;
 
       $.ajax({
         type: 'post',
@@ -80,14 +81,13 @@ if (isset($_SESSION['logado'])) {
         url: 'src/login.php',
         data: {
           'usuario': usuario,
-          'senha': senha
+          'senha': senha,
+          'lembrar': lembrar
         },
         success: function(retorno) {
           if (retorno['codigo'] == 2) {
-            // Redirecionar para o sistema
             window.location = 'sistema.php';
           } else {
-            // Senão, mostrar alerta
             alert(retorno['mensagem']);
           }
         },

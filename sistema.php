@@ -1,6 +1,11 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['logado'])) {
+  header('LOCATION: index.php');
+  exit;
+}
+
 $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'Usuário';
 ?>
 
