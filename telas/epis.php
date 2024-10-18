@@ -215,6 +215,7 @@
 </script>
 
 <script>
+  //https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event
   document.addEventListener("DOMContentLoaded", function() {
     const btnSalvar = document.querySelector("#btn_salvar");
 

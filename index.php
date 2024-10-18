@@ -38,18 +38,15 @@ if (isset($_SESSION['logado'])) {
 <body>
   <main class="form-cadastro">
     <form id="form-login">
-      <h1 class="h3 mb-3 fw-normal">Login</h1>
+      <h2 class="text-center">MyEPI's Login</h2>
+      <hr>
       <div class="form-floating">
-        <input type="text" class="form-control" id="txt_usuario" required>
+        <input type="text" class="form-control mb-3" id="txt_usuario" required>
         <label for="txt_usuario">Usuário</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="txt_senha" required>
+        <input type="password" class="form-control mb-3" id="txt_senha" required>
         <label for="txt_senha">Senha</label>
-      </div>
-      <div class="form-check text-start my-3">
-        <input class="form-check-input" type="checkbox" id="check_lembrar">
-        <label class="form-check-label" for="check_lembrar">Manter-me conectado</label>
       </div>
       <button type="button" class="btn btn-primary w-100 py-2" onclick="entrar()">Entrar</button>
       <p class="mt-3 text-body-secondary text-center">
@@ -73,7 +70,6 @@ if (isset($_SESSION['logado'])) {
     function entrar() {
       var usuario = document.getElementById('txt_usuario').value;
       var senha = document.getElementById('txt_senha').value;
-      var lembrar = document.getElementById('check_lembrar').checked;
 
       $.ajax({
         type: 'post',
@@ -81,8 +77,7 @@ if (isset($_SESSION['logado'])) {
         url: 'src/login.php',
         data: {
           'usuario': usuario,
-          'senha': senha,
-          'lembrar': lembrar
+          'senha': senha
         },
         success: function(retorno) {
           if (retorno['codigo'] == 2) {

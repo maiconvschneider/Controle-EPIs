@@ -1,18 +1,10 @@
-<?php
-// Verificação de sessão
-session_start();
-if (isset($_SESSION['logado'])) {
-  header('LOCATION: sistema.php');
-}
-?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro - EXEMPLO</title>
+  <title>MyEPI's Cadastro</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
@@ -38,22 +30,24 @@ if (isset($_SESSION['logado'])) {
 <body>
   <main class="form-cadastro">
     <form id="form-cadastro">
-      <h1 class="h3 mb-3 fw-normal">Cadastrar Usuário</h1>
+      <h2 class="text-center">MyEPI's Cadastro</h2>
+      <hr>
       <div class="form-floating">
-        <input type="text" class="form-control" id="txt_nome" required>
+        <input type="text" class="form-control mb-3" id="txt_nome" required>
         <label for="txt_nome">Nome</label>
       </div>
       <div class="form-floating">
-        <input type="text" class="form-control" id="txt_usuario" required>
+        <input type="text" class="form-control mb-3" id="txt_usuario" required>
         <label for="txt_usuario">Usuário</label>
       </div>
       <div class="form-floating">
-        <input type="password" class="form-control" id="txt_senha" required>
+        <input type="password" class="form-control mb-3" id="txt_senha" required>
         <label for="txt_senha">Senha</label>
       </div>
       <hr>
       <button type="button" class="btn btn-primary w-100 py-2" onclick="cadastrar()">Cadastrar</button>
-      <p class="mt-5 mb-3 text-body-secondary text-center"><a href="index.php">Já tem uma conta? Faça login</a></p>
+      <p class="mt-3 text-body-secondary text-center"><a href="index.php">Já tem uma conta? Faça login</a></p>
+      <p class="mt-5 mb-3 text-body-secondary text-center">MyEPI's &copy; 2024</p>
     </form>
   </main>
 

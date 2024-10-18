@@ -2,7 +2,6 @@
 // Validação
 $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : '';
 $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
-$lembrar = isset($_POST['lembrar']) ? $_POST['lembrar'] : '';
 
 if (empty($usuario) || empty($senha)) {
   $resposta = [
@@ -38,11 +37,9 @@ try {
     $_SESSION['data_hora_login'] = date('d/m/Y H:i:s');
 
     // Definir cookies
-    if ($lembrar === 'true') {
-      $tempo = time() + (86400); // 1 dia
-      setcookie('id_usuario', $dados_usuario['id_usuario'], $tempo, "/");
-      setcookie('nome_usuario', $dados_usuario['nome'], $tempo, "/");
-    }
+    $tempo = time() + (86400); // 1 dia
+    setcookie('id_usuario', $dados_usuario['id_usuario'], $tempo, "/");
+    setcookie('nome_usuario', $dados_usuario['nome'], $tempo, "/");
 
     // Login autenticado com suscesso
     $resposta = [

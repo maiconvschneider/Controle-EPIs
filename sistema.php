@@ -115,6 +115,10 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
             echo '<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class>Bem-vindo ao sistema, ' . $nomeUsuario . '!</h1>
                   </div>';
+
+            echo '<div class="d-flex justify-content-center align-items-center">
+                  <img src="img/logo.jpg" alt="logo" style="width: 90%; max-width: 1300px;">
+                </div>';
             break;
         }
         ?>

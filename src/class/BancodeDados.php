@@ -5,7 +5,7 @@ class BancodeDados
 
   function __construct()
   {
-    $this->conexao = new PDO('mysql:host=localhost;dbname=db_epis;charset=utf8mb4', 'root', '');
+    $this->conexao = new PDO('mysql:host=localhost;dbname=db_epis;port=3307;charset=utf8mb4', 'root', '');
   }
   public function ExecutarComando($sql, $parametros = [])
   {
