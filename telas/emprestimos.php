@@ -86,9 +86,7 @@
             <div class="col-4">
               <label for="txt_status" class="form-label">Status</label>
               <select class="form-control" name="txt_status" id="txt_status" style="border-radius: 5px;">
-                <option value=""></option>
-                <option value="Pendente">Aberto</option>
-                <option value="Emprestado">Emprestado</option>
+                <option value="Pendente">Pendente</option>
                 <option value="Devolvido">Devolvido</option>
               </select>
             </div>
@@ -198,20 +196,11 @@
                                 <td><button type='button' class='btn btn-danger btn-sm remover_equipamento'><i class='bi bi-trash'></i></button></td>
                               </tr>";
                       }
-                    } else {
-                      echo "<tr>
-                              <td colspan='3' class='text-center'>Nenhum equipamento emprestado...</td>
-                            </tr>";
                     }
                   } catch (PDOException $erro) {
                     $msg = $erro->getMessage();
                     echo "<script>alert(\"$msg\");</script>";
                   }
-                } else {
-                  // Caso seja um novo empréstimo, não exibe a tabela de equipamentos emprestados
-                  echo "<tr>
-                          <td colspan='3' class='text-center'>Novo registro - Nenhum equipamento adicionado ainda.</td>
-                        </tr>";
                 }
                 ?>
               </tbody>
@@ -221,7 +210,6 @@
         </div>
         <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
           <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
-          <button class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
           <button class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Efetivar Empréstimo</button>
         </div>
       </form>
@@ -294,15 +282,24 @@
     // Pegando os equipamentos adicionados à tabela
     var equipamentos = [];
     $('#tabela_equipamentos tbody tr').each(function() {
-      var idEquipamento = $(this).find('.id_equipamento').text();
-      var qtdEquipamento = $(this).find('.qtd_equipamento').text();
-      console.log("ID Equipamento: " + idEquipamento + ", Qtd: " + qtdEquipamento);
-      var equipamento = {
-        id_equipamento: idEquipamento,
-        qtd_equipamento: qtdEquipamento
-      };
-      equipamentos.push(equipamento);
+      var idEquipamento = $(this).find('.id_equipamento').val();
+      var qtdEquipamento = $(this).find('td:nth-child(3)').text();
+
+      // Verifica se a quantidade é válida      
+      if (qtdEquipamento && parseInt(qtdEquipamento) > 0) {
+        var equipamento = {
+          id_equipamento: idEquipamento,
+          qtd_equipamento: qtdEquipamento
+        };
+        equipamentos.push(equipamento);
+      }
     });
+
+    // Verifica se há equipamentos para enviar
+    if (equipamentos.length === 0) {
+      alert('Por favor, adicione ao menos um equipamento.');
+      return;
+    }
 
     $.ajax({
       type: 'post',
@@ -323,18 +320,11 @@
           alert(retorno['mensagem']);
         }
       },
-      error: function(jqXHR, textStatus, errorThrown) {
-        var mensagemErro = `
-      Ocorreu um erro na requisição:
-      \nStatus: ${jqXHR.status} - ${jqXHR.statusText}
-      \nMensagem de Erro: ${errorThrown}
-      \nDetalhes da Resposta: ${jqXHR.responseText}
-    `;
-        alert(mensagemErro);
+      error: function(erro) {
+        alert('Ocorreu um erro na requisição: ' + erro);
       }
     });
   }
-
 
   // Devolver Emprestimo
   function devolver(idEmprestimo) {

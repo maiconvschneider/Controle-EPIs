@@ -162,6 +162,7 @@ CREATE TABLE IF NOT EXISTS `db_epis`.`emprestimo_equipamentos` (
   `id_emprestimo_equipamento` INT(11) NOT NULL AUTO_INCREMENT,
   `id_emprestimo` INT(11) NOT NULL,
   `id_equipamento` INT(11) NOT NULL,
+  `qtd_equipamento` INT(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id_emprestimo_equipamento`),
   INDEX `idx_emprestimo` (`id_emprestimo` ASC),
   INDEX `idx_equipamento` (`id_equipamento` ASC),

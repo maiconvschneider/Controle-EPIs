@@ -5,7 +5,7 @@ $colaborador = isset($_POST['colaborador']) ? $_POST['colaborador'] : '';
 $data_emprestimo = isset($_POST['data_emprestimo']) ? $_POST['data_emprestimo'] : '';
 $status = isset($_POST['status']) ? $_POST['status'] : '';
 
-if (empty($colaborador) || empty($data_emprestimo) || empty($status)) {
+if (empty($colaborador) || empty($data_emprestimo) || empty($status) || !isset($_POST['equipamentos']) || count($_POST['equipamentos']) === 0) {
   $resposta = [
     'codigo' => 1,
     'mensagem' => 'Por favor, preencha todos os campos e adicione ao menos um equipamento!'
@@ -27,22 +27,37 @@ try {
 
     $id_emprestimo = $banco->conexao->lastInsertId();
 
-    // Inserir cada equipamento relacionado ao empréstimo
+    // verifica qtd disponivel de cada equipamento
     foreach ($_POST['equipamentos'] as $equipamento) {
       $id_equipamento = $equipamento['id_equipamento'];
       $qtd_equipamento = $equipamento['qtd_equipamento'];
 
-      // Inserir na tabela emprestimo_equipamentos
-      $sql = 'INSERT INTO emprestimo_equipamentos (id_emprestimo, id_equipamento, qtd_equipamento) 
-              VALUES (?, ?, ?)';
-      $parametros = [$id_emprestimo, $id_equipamento, $qtd_equipamento];
-      $banco->ExecutarComando($sql, $parametros);
-
-      $sql = 'UPDATE equipamentos 
-              SET quantidade_disponivel = quantidade_disponivel - ? 
+      // verifica qtd disponivel
+      $sql = 'SELECT quantidade_disponivel 
+              FROM equipamentos 
               WHERE id_equipamento = ?';
-      $parametros = [$qtd_equipamento, $id_equipamento];
-      $banco->ExecutarComando($sql, $parametros);
+      $resultado = $banco->Consultar($sql, [$id_equipamento]);
+
+      if ($resultado['quantidade_disponivel'] >= $qtd_equipamento) {
+        $sql = 'INSERT INTO emprestimo_equipamentos (id_emprestimo, id_equipamento, qtd_equipamento) 
+                VALUES (?, ?, ?)';
+        $parametros = [$id_emprestimo, $id_equipamento, $qtd_equipamento];
+        $banco->ExecutarComando($sql, $parametros);
+
+        // atualiza qtd do item
+        $sql = 'UPDATE equipamentos 
+                SET quantidade_disponivel = quantidade_disponivel - ? 
+                WHERE id_equipamento = ?';
+        $parametros = [$qtd_equipamento, $id_equipamento];
+        $banco->ExecutarComando($sql, $parametros);
+      } else {
+        $resposta = [
+          'codigo' => 1,
+          'mensagem' => "Quantidade disponível insuficiente para o equipamento ID: $id_equipamento"
+        ];
+        echo json_encode($resposta);
+        exit;
+      }
     }
 
     $resposta = [

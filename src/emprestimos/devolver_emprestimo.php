@@ -2,18 +2,57 @@
 $idEmprestimo = isset($_POST['id_emprestimo']) ? $_POST['id_emprestimo'] : '';
 
 try {
-  include_once '../class/BancodeDados.php';
-  $banco = new BancodeDados;
+  include_once '../class/BancoDeDados.php';
+  $banco = new BancoDeDados;
 
-  // Atualiza o status para "Devolvido"
-  $sql = "UPDATE emprestimos SET status = 'Devolvido' WHERE id_emprestimo = ?";
+  // Primeiro, verifica o status do empréstimo
+  $sql = "SELECT status 
+          FROM emprestimos 
+          WHERE id_emprestimo = ?";
   $parametros = [$idEmprestimo];
-  $banco->ExecutarComando($sql, $parametros);
+  $resultado = $banco->Consultar($sql, $parametros);
 
-  $retorno = [
-    'codigo' => 2,
-    'mensagem' => 'Empréstimo devolvido com sucesso!'
-  ];
+  if ($resultado) {
+    $status = $resultado['status'];
+
+    if ($status == 'Devolvido') {
+      $retorno = [
+        'codigo' => 1,
+        'mensagem' => 'Este empréstimo já foi devolvido.'
+      ];
+      echo json_encode($retorno);
+      exit;
+    }
+
+    $sql = "UPDATE emprestimos 
+            SET status = 'Devolvido', data_devolucao = NOW() 
+            WHERE id_emprestimo = ?";
+    $parametros = [$idEmprestimo];
+    $banco->ExecutarComando($sql, $parametros);
+
+    $sql = "SELECT id_equipamento, qtd_equipamento 
+            FROM emprestimo_equipamentos 
+            WHERE id_emprestimo = ?";
+    $equipamentos = $banco->Consultar($sql, [$idEmprestimo]);
+
+    foreach ($equipamentos as $equipamento) {
+      $sql = "UPDATE equipamentos 
+              SET quantidade_disponivel = quantidade_disponivel + ? 
+              WHERE id_equipamento = ?";
+      $parametros = [$equipamento['qtd_equipamento'], $equipamento['id_equipamento']];
+      $banco->ExecutarComando($sql, $parametros);
+    }
+
+    $retorno = [
+      'codigo' => 2,
+      'mensagem' => 'Empréstimo devolvido com sucesso!'
+    ];
+  } else {
+    $retorno = [
+      'codigo' => 1,
+      'mensagem' => 'Empréstimo não encontrado.'
+    ];
+  }
 } catch (PDOException $erro) {
   $retorno = [
     'codigo' => 1,
