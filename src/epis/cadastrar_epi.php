@@ -21,20 +21,23 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') {
-    $sql = 'INSERT INTO equipamentos (nome, descricao, quantidade_total, quantidade_disponivel) VALUES (?, ?, ?, ?)';
+    $sql = 'INSERT INTO equipamentos (nome, descricao, quantidade_total, quantidade_disponivel) 
+            VALUES (?, ?, ?, ?)';
     $parametros = [$nome, $descricao, $qtd_total, $qtd_disp];
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'status' => 'sucesso',
+      'status' => 'ok',
     ];
   } else {
-    $sql = 'UPDATE equipamentos SET nome = ?, descricao = ?, quantidade_total = ?, quantidade_disponivel = ? WHERE id_equipamento = ?';
+    $sql = 'UPDATE equipamentos 
+            SET nome = ?, descricao = ?, quantidade_total = ?, quantidade_disponivel = ? 
+            WHERE id_equipamento = ?';
     $parametros = [$nome, $descricao, $qtd_total, $qtd_disp, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'status' => 'sucesso',
+      'status' => 'ok_atualizar',
     ];
   }
 

@@ -47,35 +47,47 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') { // Cadastrar
-    $sql = 'INSERT INTO colaboradores (nome, matricula, id_departamento, email) VALUES (?, ?, ?, ?)';
+    $sql = 'INSERT INTO colaboradores (nome, matricula, id_departamento, email) 
+            VALUES (?, ?, ?, ?)';
     $parametros = [$nome, $matricula, $id_departamento, $email];
     $banco->ExecutarComando($sql, $parametros);
 
     // Pegar o ID do colaborador cadastrado
     $id_colaborador = $banco->conexao->lastInsertId();
 
-    $resposta = ['status' => 'sucesso'];
+    $resposta = [
+        'status' => 'ok'
+      ];
   } else { // Atualizar
-    $sql = 'UPDATE colaboradores SET nome = ?, matricula = ?, id_departamento = ?, email = ? WHERE id_colaborador = ?';
+    $sql = 'UPDATE colaboradores 
+            SET nome = ?, matricula = ?, id_departamento = ?, email = ? 
+            WHERE id_colaborador = ?';
     $parametros = [$nome, $matricula, $id_departamento, $email, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $id_colaborador = $id;
-    $resposta = ['status' => 'sucesso'];
+    $resposta = [
+      'status' => 'ok_atualizar'
+    ];
   }
 
   // verificar se o colaborador já tem um endereço cadastrado
-  $sql = 'SELECT COUNT(*) AS total_endereco FROM colaboradores_endereco WHERE id_colaborador = ?';
+  $sql = 'SELECT COUNT(*) AS total_endereco 
+          FROM colaboradores_endereco 
+          WHERE id_colaborador = ?';
   $parametros = [$id_colaborador];
   $resultado = $banco->Consultar($sql, $parametros);
   $existe_endereco = $resultado['total_endereco'] > 0;
 
   if ($existe_endereco) { // Atualizar endereço
-    $sql = 'UPDATE colaboradores_endereco SET cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, uf = ?, cidade = ? WHERE id_colaborador = ?';
+    $sql = 'UPDATE colaboradores_endereco 
+            SET cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, uf = ?, cidade = ? 
+            WHERE id_colaborador = ?';
     $parametros = [$cep, $endereco, $numero, $complemento, $bairro, $uf, $cidade, $id_colaborador];
     $banco->ExecutarComando($sql, $parametros);
   } else if ($preencheu_endereco) {
-    $sql = 'INSERT INTO colaboradores_endereco (id_colaborador, cep, endereco, numero, complemento, bairro, uf, cidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    $sql = 'INSERT INTO colaboradores_endereco (id_colaborador, cep, endereco, numero, complemento, bairro, uf, cidade) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     $parametros = [$id_colaborador, $cep, $endereco, $numero, $complemento, $bairro, $uf, $cidade];
     $banco->ExecutarComando($sql, $parametros);
   }

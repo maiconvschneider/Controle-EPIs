@@ -24,8 +24,7 @@ try {
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'status' => 'sucesso',
-      'mensagem' => 'Departamento cadastrado com sucesso!'
+      'status' => 'ok',
     ];
   } else {
     $sql = 'UPDATE departamentos SET nome = ?, descricao = ? WHERE id_departamento = ?';
@@ -33,8 +32,7 @@ try {
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'status' => 'sucesso',
-      'mensagem' => 'Departamento atualizado com sucesso!'
+      'status' => 'ok_atualizar',
     ];
   }
 

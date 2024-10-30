@@ -22,7 +22,7 @@ try {
   $dados = $banco->consultar($sql, $parametros);
 
   $resposta = [
-    'status' => 'sucesso',
+    'status' => 'ok',
     'dados' => $dados
   ];
   echo json_encode($resposta);

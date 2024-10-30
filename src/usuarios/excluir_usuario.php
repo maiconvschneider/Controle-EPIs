@@ -14,12 +14,13 @@ if (empty($id_usuario)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'DELETE FROM usuarios WHERE id_usuario = ?';
+  $sql = 'DELETE FROM usuarios 
+          WHERE id_usuario = ?';
   $parametros = [$id_usuario];
   $banco->executarComando($sql, $parametros);
 
   $resposta = [
-    'status' => 'sucesso',
+    'status' => 'ok',
     'mensagem' => 'Usuário removido com sucesso!'
   ];
   echo json_encode($resposta);

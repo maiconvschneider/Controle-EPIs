@@ -129,10 +129,10 @@
         'tipo': tipo
       },
       success: function(retorno) {
-        if (retorno['status'] == 'sucesso') {
+        if (retorno['status'] == 'ok') {
           alert('Usuário cadastrado com sucesso!');
           window.location.reload();
-        } else if (retorno['codigo'] == 3) {
+        } else if (retorno['status'] == 'ok_atualizar') {
           alert('Usuário atualizado com sucesso!');
           window.location.reload();
         } else {
@@ -155,7 +155,7 @@
         'id_usuario': idUsuario
       },
       success: function(retorno) {
-        if (retorno['status'] == 'sucesso') {
+        if (retorno['status'] == 'ok') {
           document.getElementById('txt_id').value = retorno['dados']['id_usuario'];
           document.getElementById('txt_nome').value = retorno['dados']['nome'];
           document.getElementById('txt_usuario').value = retorno['dados']['usuario'];
@@ -187,7 +187,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['status'] == 'sucesso') {
+          if (retorno['status'] == 'ok') {
             registrarLog('Exclusão de Usuário - ID: ' + idUsuario);
             window.location.reload();
           }

@@ -10,7 +10,7 @@ try {
   $banco->ExecutarComando($sql, $parametros);
 
   $resposta = [
-    'status' => 'sucesso',
+    'status' => 'ok',
   ];
 
   echo json_encode($resposta);

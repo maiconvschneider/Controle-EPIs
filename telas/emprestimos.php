@@ -309,7 +309,7 @@
         'equipamentos': equipamentos
       },
       success: function(retorno) {
-        if (retorno['status'] == 'sucesso') {
+        if (retorno['status'] == 'ok') {
           alert('Empréstimo realizado com sucesso!');
           window.location.reload();
         } else {
@@ -335,7 +335,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['status'] == 'sucesso') {
+          if (retorno['status'] == 'ok') {
             registrarLog('Devolução de Empréstimo - ID: ' + idEmprestimo);
             window.location.reload();
           }
@@ -360,7 +360,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['status'] == 'sucesso') {
+          if (retorno['status'] == 'ok') {
             registrarLog('Exclusão de Empréstimo - ID: ' + idEmprestimo);
             window.location.reload();
           }

@@ -13,12 +13,13 @@ if (empty($id_departamento)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'SELECT * FROM departamentos WHERE id_departamento = ?';
+  $sql = 'SELECT * FROM departamentos 
+          WHERE id_departamento = ?';
   $parametros = [$id_departamento];
   $dados = $banco->consultar($sql, $parametros);
 
   $resposta = [
-    'status' => 'sucesso',
+    'status' => 'ok',
     'dados' => $dados
   ];
   echo json_encode($resposta);

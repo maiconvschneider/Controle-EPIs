@@ -21,22 +21,23 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') {
-    $sql = 'INSERT INTO usuarios (nome, usuario, senha, tipo) VALUES (?, ?, ?, ?)';
+    $sql = 'INSERT INTO usuarios (nome, usuario, senha, tipo) 
+            VALUES (?, ?, ?, ?)';
     $parametros = [$nome, $usuario, $senha, $tipo];
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'status' => 'sucesso',
-      'mensagem' => 'Usuário cadastrado com sucesso!'
+      'status' => 'ok',
     ];
   } else {
-    $sql = 'UPDATE usuarios SET nome = ?, usuario = ?, senha = ?, tipo = ? WHERE id_usuario = ?';
+    $sql = 'UPDATE usuarios 
+            SET nome = ?, usuario = ?, senha = ?, tipo = ? 
+            WHERE id_usuario = ?';
     $parametros = [$nome, $usuario, $senha, $tipo, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'status' => 'sucesso',
-      'mensagem' => 'Usuário atualizado com sucesso!'
+      'status' => 'ok_atualizar',
     ];
   }
 

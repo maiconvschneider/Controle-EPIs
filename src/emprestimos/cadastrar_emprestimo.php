@@ -61,7 +61,7 @@ try {
     }
 
     $resposta = [
-      'status' => 'sucesso',
+      'status' => 'ok',
       'mensagem' => 'Empréstimo realizado com sucesso!'
     ];
   }

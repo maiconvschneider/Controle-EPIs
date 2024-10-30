@@ -6,9 +6,10 @@ try {
   $banco = new BancoDeDados;
 
   // Primeiro, verifica o status do empréstimo
-  $sql = "SELECT status 
+  $sql =
+  'SELECT status 
           FROM emprestimos 
-          WHERE id_emprestimo = ?";
+          WHERE id_emprestimo = ?';
   $parametros = [$idEmprestimo];
   $resultado = $banco->Consultar($sql, $parametros);
 
@@ -30,21 +31,23 @@ try {
     $parametros = [$idEmprestimo];
     $banco->ExecutarComando($sql, $parametros);
 
-    $sql = "SELECT id_equipamento, qtd_equipamento 
+    $sql =
+    'SELECT id_equipamento, qtd_equipamento 
             FROM emprestimo_equipamentos 
-            WHERE id_emprestimo = ?";
+            WHERE id_emprestimo = ?';
     $equipamentos = $banco->Consultar($sql, [$idEmprestimo]);
 
     foreach ($equipamentos as $equipamento) {
-      $sql = "UPDATE equipamentos 
+      $sql =
+        'UPDATE equipamentos 
               SET quantidade_disponivel = quantidade_disponivel + ? 
-              WHERE id_equipamento = ?";
+              WHERE id_equipamento = ?';
       $parametros = [$equipamento['qtd_equipamento'], $equipamento['id_equipamento']];
       $banco->ExecutarComando($sql, $parametros);
     }
 
     $retorno = [
-      'status' => 'sucesso',
+      'status' => 'ok',
       'mensagem' => 'Empréstimo devolvido com sucesso!'
     ];
   } else {

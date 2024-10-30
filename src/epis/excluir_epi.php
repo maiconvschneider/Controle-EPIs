@@ -14,12 +14,13 @@ if (empty($id_equipamento)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'DELETE FROM equipamentos WHERE id_equipamento = ?';
+  $sql = 'DELETE FROM equipamentos 
+          WHERE id_equipamento = ?';
   $parametros = [$id_equipamento];
   $banco->ExecutarComando($sql, $parametros);
 
   $resposta = [
-    'status' => 'sucesso',
+    'status' => 'ok',
     'mensagem' => 'Equipamento removido com sucesso!'
   ];
   echo json_encode($resposta);

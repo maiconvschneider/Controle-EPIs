@@ -75,7 +75,7 @@ if (isset($_SESSION['logado'])) {
           'senha': senha
         },
         success: function(retorno) {
-          if (retorno['status'] == 'sucesso') {
+          if (retorno['status'] == 'ok') {
             window.location = 'sistema.php';
           } else {
             alert(retorno['mensagem']);

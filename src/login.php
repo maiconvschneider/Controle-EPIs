@@ -43,7 +43,7 @@ try {
 
     // Login autenticado com suscesso
     $resposta = [
-      'status' => 'sucesso',
+      'status' => 'ok',
     ];
     echo json_encode($resposta);
   } else {
