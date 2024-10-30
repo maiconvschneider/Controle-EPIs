@@ -70,7 +70,7 @@
           'senha': senha
         },
         success: function(retorno) {
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'ok') {
             alert(retorno['mensagem']);
             window.location = 'index.php';
           } else {

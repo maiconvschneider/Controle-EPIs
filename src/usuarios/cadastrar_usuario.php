@@ -8,7 +8,7 @@ $tipo = isset($_POST['tipo']) ? $_POST['tipo'] : 'U';
 
 if (empty($nome) || empty($usuario) || empty($senha)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor, preencha todos os campos!'
   ];
   echo json_encode($resposta);
@@ -21,29 +21,30 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') {
-    $sql = 'INSERT INTO usuarios (nome, usuario, senha, tipo) VALUES (?, ?, ?, ?)';
+    $sql = 'INSERT INTO usuarios (nome, usuario, senha, tipo) 
+            VALUES (?, ?, ?, ?)';
     $parametros = [$nome, $usuario, $senha, $tipo];
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'codigo' => 2,
-      'mensagem' => 'Usuário cadastrado com sucesso!'
+      'status' => 'ok',
     ];
   } else {
-    $sql = 'UPDATE usuarios SET nome = ?, usuario = ?, senha = ?, tipo = ? WHERE id_usuario = ?';
+    $sql = 'UPDATE usuarios 
+            SET nome = ?, usuario = ?, senha = ?, tipo = ? 
+            WHERE id_usuario = ?';
     $parametros = [$nome, $usuario, $senha, $tipo, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $resposta = [
-      'codigo' => 3,
-      'mensagem' => 'Usuário atualizado com sucesso!'
+      'status' => 'ok_atualizar',
     ];
   }
 
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);

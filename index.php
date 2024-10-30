@@ -37,7 +37,7 @@ if (isset($_SESSION['logado'])) {
 
 <body>
   <main class="form-cadastro">
-    <form id="form-login">
+    <form id="form-login" onsubmit="return false">
       <h2 class="text-center">MyEPI's Login</h2>
       <hr>
       <div class="form-floating">
@@ -61,11 +61,6 @@ if (isset($_SESSION['logado'])) {
   <!-- Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // Desativar o Submit do formulário (com JQuery)
-    $('#form-login').submit(function() {
-      return false;
-    });
-
     // Login
     function entrar() {
       var usuario = document.getElementById('txt_usuario').value;
@@ -80,7 +75,7 @@ if (isset($_SESSION['logado'])) {
           'senha': senha
         },
         success: function(retorno) {
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'ok') {
             window.location = 'sistema.php';
           } else {
             alert(retorno['mensagem']);

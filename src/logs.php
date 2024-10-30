@@ -10,13 +10,13 @@ try {
   $banco->ExecutarComando($sql, $parametros);
 
   $resposta = [
-    'codigo' => 2
+    'status' => 'ok',
   ];
 
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);

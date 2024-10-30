@@ -3,7 +3,7 @@
 $id_equipamento = isset($_POST['id_equipamento']) ? $_POST['id_equipamento'] : '';
 if (empty($id_equipamento)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'O ID do equipamento está faltando!'
   ];
   echo json_encode($resposta);
@@ -14,18 +14,19 @@ if (empty($id_equipamento)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'DELETE FROM equipamentos WHERE id_equipamento = ?';
+  $sql = 'DELETE FROM equipamentos 
+          WHERE id_equipamento = ?';
   $parametros = [$id_equipamento];
   $banco->ExecutarComando($sql, $parametros);
 
   $resposta = [
-    'codigo' => 2,
+    'status' => 'ok',
     'mensagem' => 'Equipamento removido com sucesso!'
   ];
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);

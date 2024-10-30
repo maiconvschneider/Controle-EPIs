@@ -17,7 +17,7 @@ $cidade = isset($_POST['cidade']) ? $_POST['cidade'] : '';
 
 if (empty($nome) || empty($matricula) || empty($id_departamento) || empty($email)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor, preencha todos os campos!'
   ];
   echo json_encode($resposta);
@@ -28,7 +28,7 @@ if (empty($nome) || empty($matricula) || empty($id_departamento) || empty($email
 // https://pt.stackoverflow.com/questions/8134/verificar-se-variável-contém-um-endereço-de-email-bem-formatado-em-php
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor, insira um email válido!'
   ];
   echo json_encode($resposta);
@@ -47,35 +47,47 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') { // Cadastrar
-    $sql = 'INSERT INTO colaboradores (nome, matricula, id_departamento, email) VALUES (?, ?, ?, ?)';
+    $sql = 'INSERT INTO colaboradores (nome, matricula, id_departamento, email) 
+            VALUES (?, ?, ?, ?)';
     $parametros = [$nome, $matricula, $id_departamento, $email];
     $banco->ExecutarComando($sql, $parametros);
 
     // Pegar o ID do colaborador cadastrado
     $id_colaborador = $banco->conexao->lastInsertId();
 
-    $resposta = ['codigo' => 2];
+    $resposta = [
+        'status' => 'ok'
+      ];
   } else { // Atualizar
-    $sql = 'UPDATE colaboradores SET nome = ?, matricula = ?, id_departamento = ?, email = ? WHERE id_colaborador = ?';
+    $sql = 'UPDATE colaboradores 
+            SET nome = ?, matricula = ?, id_departamento = ?, email = ? 
+            WHERE id_colaborador = ?';
     $parametros = [$nome, $matricula, $id_departamento, $email, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $id_colaborador = $id;
-    $resposta = ['codigo' => 3];
+    $resposta = [
+      'status' => 'ok_atualizar'
+    ];
   }
 
   // verificar se o colaborador já tem um endereço cadastrado
-  $sql = 'SELECT COUNT(*) AS total_endereco FROM colaboradores_endereco WHERE id_colaborador = ?';
+  $sql = 'SELECT COUNT(*) AS total_endereco 
+          FROM colaboradores_endereco 
+          WHERE id_colaborador = ?';
   $parametros = [$id_colaborador];
   $resultado = $banco->Consultar($sql, $parametros);
   $existe_endereco = $resultado['total_endereco'] > 0;
 
   if ($existe_endereco) { // Atualizar endereço
-    $sql = 'UPDATE colaboradores_endereco SET cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, uf = ?, cidade = ? WHERE id_colaborador = ?';
+    $sql = 'UPDATE colaboradores_endereco 
+            SET cep = ?, endereco = ?, numero = ?, complemento = ?, bairro = ?, uf = ?, cidade = ? 
+            WHERE id_colaborador = ?';
     $parametros = [$cep, $endereco, $numero, $complemento, $bairro, $uf, $cidade, $id_colaborador];
     $banco->ExecutarComando($sql, $parametros);
   } else if ($preencheu_endereco) {
-    $sql = 'INSERT INTO colaboradores_endereco (id_colaborador, cep, endereco, numero, complemento, bairro, uf, cidade) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    $sql = 'INSERT INTO colaboradores_endereco (id_colaborador, cep, endereco, numero, complemento, bairro, uf, cidade) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
     $parametros = [$id_colaborador, $cep, $endereco, $numero, $complemento, $bairro, $uf, $cidade];
     $banco->ExecutarComando($sql, $parametros);
   }
@@ -83,7 +95,7 @@ try {
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);

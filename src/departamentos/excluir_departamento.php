@@ -3,7 +3,7 @@
 $id_departamento = isset($_POST['id_departamento']) ? $_POST['id_departamento'] : '';
 if (empty($id_departamento)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'O ID do departamento está faltando!'
   ];
   echo json_encode($resposta);
@@ -14,18 +14,19 @@ if (empty($id_departamento)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'UPDATE departamentos set ativo = 0 WHERE id_departamento = ?';
+  $sql = 'UPDATE departamentos set ativo = 0 
+          WHERE id_departamento = ?';
   $parametros = [$id_departamento];
   $banco->executarComando($sql, $parametros);
 
   $resposta = [
-    'codigo' => 2,
+    'status' => 'ok',
     'mensagem' => 'Departamento removido com sucesso!'
   ];
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve um erro ao tentar remover o departamento.'
   ];
   echo json_encode($resposta);

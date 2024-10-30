@@ -61,7 +61,7 @@
 <div id="adicionar_departamento" class="modal fade" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form id="form_departamento" method="post" enctype="multipart/form-data">
+      <form id="form_departamento" method="post" enctype="multipart/form-data" onsubmit="return false">
         <div class="modal-header" style="background-color: #435d7d; color: #fff;">
           <h4 class="modal-title">Departamento</h4>
           <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
@@ -90,10 +90,6 @@
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-  $('#form_departamento').submit(function() {
-    return false
-  });
-
   // Cadastro de Departamento
   function cadastrar() {
     var id = document.getElementById('txt_id').value;
@@ -110,10 +106,10 @@
         'descricao': descricao
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'ok') {
           alert('Departamento cadastrado com sucesso!');
           window.location.reload();
-        } else if (retorno['codigo'] == 3) {
+        } else if (retorno['status'] == 'ok_atualizar') {
           alert('Departamento atualizado com sucesso!');
           window.location.reload();
         } else {
@@ -136,7 +132,7 @@
         'id_departamento': idDepartamento
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'ok') {
           document.getElementById('txt_id').value = retorno['dados']['id_usuario'];
           document.getElementById('txt_nome').value = retorno['dados']['nome'];
           document.getElementById('txt_descricao').value = retorno['dados']['descricao'];
@@ -166,7 +162,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'ok') {
             registrarLog('Exclusão de Departamento - ID: ' + idDepartamento);
             window.location.reload();
           }
