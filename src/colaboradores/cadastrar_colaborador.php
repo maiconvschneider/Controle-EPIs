@@ -17,7 +17,7 @@ $cidade = isset($_POST['cidade']) ? $_POST['cidade'] : '';
 
 if (empty($nome) || empty($matricula) || empty($id_departamento) || empty($email)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor, preencha todos os campos!'
   ];
   echo json_encode($resposta);
@@ -28,7 +28,7 @@ if (empty($nome) || empty($matricula) || empty($id_departamento) || empty($email
 // https://pt.stackoverflow.com/questions/8134/verificar-se-variável-contém-um-endereço-de-email-bem-formatado-em-php
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor, insira um email válido!'
   ];
   echo json_encode($resposta);
@@ -54,14 +54,14 @@ try {
     // Pegar o ID do colaborador cadastrado
     $id_colaborador = $banco->conexao->lastInsertId();
 
-    $resposta = ['codigo' => 2];
+    $resposta = ['status' => 'sucesso'];
   } else { // Atualizar
     $sql = 'UPDATE colaboradores SET nome = ?, matricula = ?, id_departamento = ?, email = ? WHERE id_colaborador = ?';
     $parametros = [$nome, $matricula, $id_departamento, $email, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $id_colaborador = $id;
-    $resposta = ['codigo' => 3];
+    $resposta = ['status' => 'sucesso'];
   }
 
   // verificar se o colaborador já tem um endereço cadastrado
@@ -83,7 +83,7 @@ try {
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);

@@ -3,7 +3,7 @@
 $id_emprestimo = isset($_POST['id_emprestimo']) ? $_POST['id_emprestimo'] : '';
 if (empty($id_emprestimo)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'O ID do empréstimo está faltando!'
   ];
   echo json_encode($resposta);
@@ -19,13 +19,13 @@ try {
   $banco->executarComando($sql, $parametros);
 
   $resposta = [
-    'codigo' => 2,
+    'status' => 'sucesso',
     'mensagem' => 'Empréstimo removido com sucesso!'
   ];
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve um erro ao tentar remover o usuário.'
   ];
   echo json_encode($resposta);

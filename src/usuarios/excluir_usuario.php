@@ -3,7 +3,7 @@
 $id_usuario = isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
 if (empty($id_usuario)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'O ID do usuário está faltando!'
   ];
   echo json_encode($resposta);
@@ -19,13 +19,13 @@ try {
   $banco->executarComando($sql, $parametros);
 
   $resposta = [
-    'codigo' => 2,
+    'status' => 'sucesso',
     'mensagem' => 'Usuário removido com sucesso!'
   ];
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve um erro ao tentar remover o usuário.'
   ];
   echo json_encode($resposta);

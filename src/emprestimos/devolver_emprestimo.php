@@ -17,7 +17,7 @@ try {
 
     if ($status == 'Devolvido') {
       $retorno = [
-        'codigo' => 1,
+        'status' => 'erro',
         'mensagem' => 'Este empréstimo já foi devolvido.'
       ];
       echo json_encode($retorno);
@@ -44,18 +44,18 @@ try {
     }
 
     $retorno = [
-      'codigo' => 2,
+      'status' => 'sucesso',
       'mensagem' => 'Empréstimo devolvido com sucesso!'
     ];
   } else {
     $retorno = [
-      'codigo' => 1,
+      'status' => 'erro',
       'mensagem' => 'Empréstimo não encontrado.'
     ];
   }
 } catch (PDOException $erro) {
   $retorno = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Erro ao registrar devolução: ' . $erro->getMessage()
   ];
 }

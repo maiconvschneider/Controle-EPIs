@@ -128,7 +128,7 @@
         'qtd_disp': qtd_disp
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'sucesso') {
           alert('Equipamento cadastrado com sucesso!');
           window.location.reload();
         } else if (retorno['codigo'] == 3) {
@@ -154,7 +154,7 @@
         'id_equipamento': idEquipamento
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'sucesso') {
           document.getElementById('txt_id').value = retorno['dados']['id_equipamento'];
           document.getElementById('txt_nome').value = retorno['dados']['nome'];
           document.getElementById('txt_descricao').value = retorno['dados']['descricao'];
@@ -186,7 +186,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'sucesso') {
             registrarLog('Exclusão de Equipamento - ID: ' + idEquipamento);
             window.location.reload();
           }

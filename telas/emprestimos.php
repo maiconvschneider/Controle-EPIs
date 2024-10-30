@@ -66,7 +66,7 @@
 <div id="adicionar_emprestimo" class="modal fade" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <form id="form_emprestimo" method="post" enctype="multipart/form-data">
+      <form id="form_emprestimo" method="post" enctype="multipart/form-data" onsubmit="return false">
         <div class="modal-header" style="background-color: #435d7d; color: #fff;">
           <h4 class="modal-title">Empréstimo</h4>
           <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
@@ -268,10 +268,6 @@
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-  $('#form_emprestimo').submit(function() {
-    return false
-  });
-
   // Registro de Emprestimo
   function cadastrar() {
     var id = document.getElementById('txt_id').value;
@@ -313,7 +309,7 @@
         'equipamentos': equipamentos
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'sucesso') {
           alert('Empréstimo realizado com sucesso!');
           window.location.reload();
         } else {
@@ -339,7 +335,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'sucesso') {
             registrarLog('Devolução de Empréstimo - ID: ' + idEmprestimo);
             window.location.reload();
           }
@@ -364,7 +360,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'sucesso') {
             registrarLog('Exclusão de Empréstimo - ID: ' + idEmprestimo);
             window.location.reload();
           }

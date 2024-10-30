@@ -68,7 +68,7 @@
 <div id="adicionar_colaborador" class="modal fade" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
-      <form id="form_colaborador" method="post" enctype="multipart/form-data">
+      <form id="form_colaborador" method="post" enctype="multipart/form-data" onsubmit="return false">
         <div class="modal-header" style="background-color: #435d7d; color: #fff;">
           <h4 class="modal-title">Colaborador</h4>
           <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
@@ -228,10 +228,6 @@
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-  $('#form_colaborador').submit(function() {
-    return false;
-  });
-
   // abrir primeiro tab do modal
   $('#adicionar_colaborador').on('shown.bs.modal', function() {
     var tabDadosPessoais = new bootstrap.Tab(document.getElementById('dados-pessoais-tab'));
@@ -319,7 +315,7 @@
         'cidade': cidade
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'sucesso') {
           alert('Colaborador cadastrado com sucesso!');
           window.location.reload();
         } else if (retorno['codigo'] == 3) {
@@ -353,7 +349,7 @@
         'id_colaborador': idColaborador
       },
       success: function(retorno) {
-        if (retorno['codigo'] == 2) {
+        if (retorno['status'] == 'sucesso') {
           document.getElementById('txt_id').value = retorno['dados']['id_colaborador'];
           document.getElementById('txt_nome').value = retorno['dados']['nome'];
           document.getElementById('txt_matricula').value = retorno['dados']['matricula'];
@@ -397,7 +393,7 @@
         },
         success: function(retorno) {
           alert(retorno['mensagem']);
-          if (retorno['codigo'] == 2) {
+          if (retorno['status'] == 'sucesso') {
             registrarLog('Exclusão de Colaborador - ID: ' + idColaborador);
             window.location.reload();
           }

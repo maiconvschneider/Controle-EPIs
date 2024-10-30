@@ -5,7 +5,7 @@ $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
 
 if (empty($usuario) || empty($senha)) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor preencha todos os campos!'
   ];
   echo json_encode($resposta);
@@ -43,19 +43,19 @@ try {
 
     // Login autenticado com suscesso
     $resposta = [
-      'codigo' => 2
+      'status' => 'sucesso',
     ];
     echo json_encode($resposta);
   } else {
     $resposta = [
-      'codigo' => 1,
+      'status' => 'erro',
       'mensagem' => 'Usuário ou senha incorretos! Verifique.'
     ];
     echo json_encode($resposta);
   }
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma excessão no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);

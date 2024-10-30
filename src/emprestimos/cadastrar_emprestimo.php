@@ -7,7 +7,7 @@ $status = isset($_POST['status']) ? $_POST['status'] : '';
 
 if (empty($colaborador) || empty($data_emprestimo) || empty($status) || !isset($_POST['equipamentos']) || count($_POST['equipamentos']) === 0) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Por favor, preencha todos os campos e adicione ao menos um equipamento!'
   ];
   echo json_encode($resposta);
@@ -52,7 +52,7 @@ try {
         $banco->ExecutarComando($sql, $parametros);
       } else {
         $resposta = [
-          'codigo' => 1,
+          'status' => 'erro',
           'mensagem' => "Quantidade disponível insuficiente para o equipamento ID: $id_equipamento"
         ];
         echo json_encode($resposta);
@@ -61,7 +61,7 @@ try {
     }
 
     $resposta = [
-      'codigo' => 2,
+      'status' => 'sucesso',
       'mensagem' => 'Empréstimo realizado com sucesso!'
     ];
   }
@@ -69,7 +69,7 @@ try {
   echo json_encode($resposta);
 } catch (PDOException $erro) {
   $resposta = [
-    'codigo' => 1,
+    'status' => 'erro',
     'mensagem' => 'Houve uma exceção no banco de dados: ' . $erro->getMessage()
   ];
   echo json_encode($resposta);
