@@ -6,8 +6,7 @@ try {
   $banco = new BancoDeDados;
 
   // Primeiro, verifica o status do empréstimo
-  $sql =
-  'SELECT status 
+  $sql = 'SELECT status 
           FROM emprestimos 
           WHERE id_emprestimo = ?';
   $parametros = [$idEmprestimo];

@@ -27,6 +27,9 @@
         $dados = $banco->Consultar($sql, [], true);
         if ($dados) {
           foreach ($dados as $linha) {
+            // <a href='#' onclick='selecionar({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-primary'>
+            //   <i class='bi bi-eye'></i>
+            // </a>
             echo
             "<tr'>
               <td>{$linha['id_emprestimo']}</td>
@@ -34,7 +37,7 @@
               <td>{$linha['data_emprestimo']}</td>
               <td>{$linha['data_devolucao']}</td>
               <td>{$linha['status']}</td>                
-              <td>
+              <td>                
                 <a href='#' onclick='devolver({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-primary'>
                   <i class='bi bi-arrow-repeat'></i>
                 </a>
@@ -345,6 +348,48 @@
         }
       });
     }
+  }
+
+  function selecionar(idEmprestimo) {
+    $.ajax({
+      type: 'post',
+      dataType: 'json',
+      url: 'src/emprestimos/selecionar_emprestimo.php',
+      data: {
+        'id_emprestimo': idEmprestimo
+      },
+      success: function(retorno) {
+        if (retorno['status'] == 'ok') {
+          // Preenche os campos do formulário do empréstimo
+          document.getElementById('txt_id').value = retorno['dados']['id_emprestimo'];
+          document.getElementById('txt_colaborador').value = retorno['dados']['id_colaborador'];
+          document.getElementById('txt_data_emprestimo').value = retorno['dados']['data_emprestimo'];
+          document.getElementById('txt_data_devolucao').value = retorno['dados']['data_devolucao'];
+          document.getElementById('txt_status').value = retorno['dados']['status'];
+
+          // Preenche a tabela de equipamentos
+          $('#tabela_equipamentos tbody').html('');
+          retorno['equipamentos'].forEach(function(equipamento) {
+            var linha = `<tr>
+                     <td class='id_equipamento' style='display:none;'>${equipamento.id_equipamento}</td>
+                     <td>${equipamento.nome_equipamento}</td>
+                     <td>${equipamento.qtd_equipamento}</td>
+                     <td><button type='button' class='btn btn-danger btn-sm remover_equipamento'><i class='bi bi-trash'></i></button></td>
+                   </tr>`;
+            $('#tabela_equipamentos tbody').append(linha);
+          });
+
+          // Exibe o modal
+          var modal = new bootstrap.Modal(document.getElementById('adicionar_emprestimo'));
+          modal.show();
+        } else {
+          alert(retorno['mensagem']);
+        }
+      },
+      error: function(erro) {
+        alert('Ocorreu um erro na requisição: ' + erro);
+      }
+    });
   }
 
   // Excluir Emprestimo
