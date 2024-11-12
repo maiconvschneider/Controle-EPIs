@@ -13,35 +13,68 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background-color: #f8f9fa;
+      background-color: #f4f6f9;
     }
 
     .form-cadastro {
       width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 420px;
+      padding: 30px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-cadastro h2 {
+      font-size: 2rem;
+      color: #435d7d;
+      margin-bottom: 20px;
+    }
+
+    .form-cadastro .form-floating input {
+      border-radius: 10px;
+    }
+
+    .form-cadastro button {
+      border-radius: 10px;
+      font-size: 1rem;
+    }
+
+    .form-cadastro .text-muted {
+      color: #6c757d;
+    }
+
+    .form-cadastro .text-body-secondary {
+      color: #adb5bd;
+    }
+
+    .form-cadastro .btn-primary {
+      background-color: #435d7d;
+      border-color: #435d7d;
+    }
+
+    .form-cadastro .btn-primary:hover {
+      background-color: #3a506b;
+      border-color: #3a506b;
     }
   </style>
 </head>
 
 <body>
   <main class="form-cadastro">
-    <form id="form-cadastro">
+    <form id="form-cadastro" onsubmit="return false">
       <h2 class="text-center">MyEPI's Cadastro</h2>
       <hr>
-      <div class="form-floating">
-        <input type="text" class="form-control mb-3" id="txt_nome" required>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="txt_nome" required>
         <label for="txt_nome">Nome</label>
       </div>
-      <div class="form-floating">
-        <input type="text" class="form-control mb-3" id="txt_usuario" required>
+      <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="txt_usuario" required>
         <label for="txt_usuario">Usuário</label>
       </div>
-      <div class="form-floating">
-        <input type="password" class="form-control mb-3" id="txt_senha" required>
+      <div class="form-floating mb-3">
+        <input type="password" class="form-control" id="txt_senha" required>
         <label for="txt_senha">Senha</label>
       </div>
       <hr>

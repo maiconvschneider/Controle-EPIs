@@ -1,100 +1,216 @@
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1>Cadastro de Equipamentos</h1>
-  <button type="button" class="w-20 btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#adicionar_epi">
-    <i class="bi bi-plus"></i> Novo
-  </button>
-</div>
+<div class="container-fluid py-4">
+  <!-- Header with back button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <a href="sistema.php" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
+      <i class="bi bi-arrow-left"></i>
+    </a>
+    <h1 class="mb-0">Gestão de Equipamentos</h1>
+    <button type="button" class="btn btn-success btn-lg rounded-pill shadow-sm" data-bs-toggle="modal" data-bs-target="#adicionar_epi">
+      <i class="bi bi-plus-lg me-2"></i>Novo Equipamento
+    </button>
+  </div>
 
-<div class="table-responsive">
-  <table class="table table-striped table-hover">
-    <thead>
-      <tr>
-        <th scope="col">ID</th>
-        <th scope="col">Nome</th>
-        <th scope="col">Descrição</th>
-        <th scope="col">Qtd Total</th>
-        <th scope="col">Qtd Disponível</th>
-        <th scope="col">Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php
-      try {
-        include_once 'src/class/BancodeDados.php';
-        $banco = new BancodeDados;
-        $sql = 'SELECT * FROM equipamentos where ativo = 1';
-        $dados = $banco->Consultar($sql, [], true);
-        if ($dados) {
-          foreach ($dados as $linha) {
-            echo
-            "<tr'>
-              <td>{$linha['id_equipamento']}</td>
-              <td>{$linha['nome']}</td>
-              <td>{$linha['descricao']}</td>
-              <td>{$linha['quantidade_total']}</td>
-              <td>{$linha['quantidade_disponivel']}</td>
-              <td>
-                <a href='#' onclick='atualizar({$linha['id_equipamento']})' class='btn btn-sm btn-outline-primary'>
-                  <i class='bi bi-pencil'></i>
-                </a>
-                <a href='#' onclick='excluir({$linha['id_equipamento']})' class='btn btn-sm btn-outline-danger'>
-                  <i class='bi bi-trash'></i>
-                </a>
-              </td>
-            </tr>";
-          }
-        } else {
-          echo
-          "<tr>
-            <td colspan = '6' class='text-center'> Nenhum equipamento cadastrado...</td>
-          </tr>";
-        }
-      } catch (PDOException $erro) {
-        $msg = $erro->getMessage();
-        echo
-        "<script>
-          alert(\"$msg\");
-        </script>";
-      }
-      ?>
-    </tbody>
-  </table>
+  <!-- Statistics cards -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body d-flex align-items-center">
+          <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+            <i class="bi bi-tools text-primary" style="font-size: 2rem;"></i>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Total de Equipamentos</h6>
+            <h4 class="mb-0">
+              <?php
+              include_once 'src/class/BancodeDados.php';
+              $banco = new BancodeDados;
+
+              // Total de equipamentos
+              $sql = 'SELECT COUNT(*) AS total FROM equipamentos';
+              $total = $banco->Consultar($sql, [], true);
+              echo $total[0]['total'];
+              ?>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body d-flex align-items-center">
+          <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+            <i class="bi bi-check-circle-fill text-success" style="font-size: 2rem;"></i>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Total Disponível</h6>
+            <h4 class="mb-0">
+              <?php
+              include_once 'src/class/BancodeDados.php';
+              $banco = new BancodeDados;
+
+              // soma de equipamentos disponíveis
+              $sql = 'SELECT SUM(quantidade_disponivel) AS total FROM equipamentos';
+              $total = $banco->Consultar($sql, [], true);
+              echo $total[0]['total'];
+              ?>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body d-flex align-items-center">
+          <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+            <i class="bi bi-box-fill text-warning" style="font-size: 2rem;"></i>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Total em Estoque</h6>
+            <h4 class="mb-0">
+              <?php
+              include_once 'src/class/BancodeDados.php';
+              $banco = new BancodeDados;
+
+              // soma de equipamentos totais
+              $sql = 'SELECT SUM(quantidade_total) AS total FROM equipamentos';
+              $total = $banco->Consultar($sql, [], true);
+              echo $total[0]['total'];
+              ?>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Equipment table -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Nome</th>
+              <th scope="col">Descrição</th>
+              <th scope="col">Qtd Total</th>
+              <th scope="col">Qtd Disponível</th>
+              <th scope="col" class="text-end">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            try {
+              include_once 'src/class/BancodeDados.php';
+              $banco = new BancodeDados;
+              $sql = 'SELECT * FROM equipamentos WHERE ativo = 1';
+              $dados = $banco->Consultar($sql, [], true);
+              if ($dados) {
+                foreach ($dados as $linha) {
+                  echo "
+                  <tr>
+                    <td>{$linha['id_equipamento']}</td>
+                    <td>
+                      <div class='d-flex align-items-center'>
+                        <div class='rounded-circle bg-light p-2 me-2'>
+                          <i class='bi bi-tools'></i>
+                        </div>
+                        {$linha['nome']}
+                      </div>
+                    </td>
+                    <td>{$linha['descricao']}</td>
+                    <td>{$linha['quantidade_total']}</td>
+                    <td>
+                      <span class='badge rounded-pill bg-" . ($linha['quantidade_disponivel'] > 0 ? 'success' : 'danger') . "'>
+                        {$linha['quantidade_disponivel']}
+                      </span>
+                    </td>
+                    <td class='text-end'>
+                      <button onclick='atualizar({$linha['id_equipamento']})' class='btn btn-sm btn-outline-primary rounded-pill me-1'>
+                        <i class='bi bi-pencil'></i>
+                      </button>
+                      <button onclick='excluir({$linha['id_equipamento']})' class='btn btn-sm btn-outline-danger rounded-pill'>
+                        <i class='bi bi-trash'></i>
+                      </button>
+                    </td>
+                  </tr>";
+                }
+              } else {
+                echo "
+                <tr>
+                  <td colspan='6' class='text-center py-4'>
+                    <div class='text-muted'>
+                      <i class='bi bi-inbox-fill' style='font-size: 2rem;'></i>
+                      <p class='mt-2 mb-0'>Nenhum equipamento cadastrado...</p>
+                    </div>
+                  </td>
+                </tr>";
+              }
+            } catch (PDOException $erro) {
+              echo "<script>alert('{$erro->getMessage()}');</script>";
+            }
+            ?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Modal -->
 <div id="adicionar_epi" class="modal fade" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <form id="form_epi" method="post" enctype="multipart/form-data">
-        <div class="modal-header" style="background-color: #435d7d; color: #fff;">
-          <h4 class="modal-title">Equipamento</h4>
-          <button type="reset" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="color: #fff; font-size: 1.2rem; opacity: 0.8;"></button>
+    <div class="modal-content border-0 shadow">
+      <form id="form_epi" method="post" enctype="multipart/form-data" onsubmit="return false">
+        <div class="modal-header border-0" style="background: linear-gradient(135deg, #435d7d, #4a6da1);">
+          <h4 class="modal-title text-white">Equipamento</h4>
+          <button type="reset" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
         </div>
-        <div class="modal-body" style="padding: 20px;">
+        <div class="modal-body p-4">
           <input type="hidden" name="txt_id" id="txt_id" value="NOVO">
 
-          <div class="form-group mb-3">
+          <div class="mb-3">
             <label for="txt_nome" class="form-label">Nome</label>
-            <input type="text" class="form-control" name="txt_nome" id="txt_nome" style="border-radius: 5px;">
-          </div>
-          <div class="form-group mb-3">
-            <label for="txt_descricao" class="form-label">Descrição</label>
-            <input type="text" class="form-control" name="txt_descricao" id="txt_descricao" style="border-radius: 5px;">
-          </div>
-          <div class="form-group row mb-3">
-            <div class="col-6">
-              <label for="txt_qtd_total" class="form-label">Qtd. Total</label>
-              <input type="number" class="form-control" name="txt_qtd_total" id="txt_qtd_total" style="border-radius: 5px;">
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                <i class="bi bi-tools"></i>
+              </span>
+              <input type="text" class="form-control border-0 bg-light" name="txt_nome" id="txt_nome">
             </div>
-            <div class="col-6">
-              <label for="txt_qtd_disp" class="form-label">Qtd. Disponível</label>
-              <input type="number" class="form-control" name="txt_qtd_disp" id="txt_qtd_disp" style="border-radius: 5px;">
+          </div>
+          <div class="mb-3">
+            <label for="txt_descricao" class="form-label">Descrição</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                <i class="bi bi-card-text"></i>
+              </span>
+              <input type="text" class="form-control border-0 bg-light" name="txt_descricao" id="txt_descricao">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="txt_qtd_total" class="form-label">Quantidade Total</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-box"></i>
+                </span>
+                <input type="number" class="form-control border-0 bg-light" name="txt_qtd_total" id="txt_qtd_total">
+              </div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="txt_qtd_disp" class="form-label">Quantidade Disponível</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-check-circle"></i>
+                </span>
+                <input type="number" class="form-control border-0 bg-light" name="txt_qtd_disp" id="txt_qtd_disp">
+              </div>
             </div>
           </div>
         </div>
-        <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
-          <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
-          <button class="btn btn-success" id="btn_salvar" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
+        <div class="modal-footer border-0 bg-light">
+          <button type="reset" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success rounded-pill px-4" onclick="cadastrar()">Salvar</button>
         </div>
       </form>
     </div>
