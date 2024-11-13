@@ -192,13 +192,13 @@
               <tbody>
                 <?php
                 try {
-                  $sqlInativos = 'SELECT c.*, d.nome as departamento 
+                  $sql = 'SELECT c.*, d.nome as departamento 
                                 FROM colaboradores c 
                                 LEFT JOIN departamentos d ON d.id_departamento = c.id_departamento 
                                 WHERE c.ativo = 0';
-                  $dadosInativos = $banco->Consultar($sqlInativos, [], true);
-                  if ($dadosInativos) {
-                    foreach ($dadosInativos as $linha) {
+                  $dados = $banco->Consultar($sql, [], true);
+                  if ($dados) {
+                    foreach ($dados as $linha) {
                       echo "
                     <tr>
                       <td>{$linha['id_colaborador']}</td>
@@ -657,6 +657,28 @@
           }
         });
       }
+    }
+
+    // Reativar Colaborador
+    function reativar(idColaborador) {
+      $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url: 'src/colaboradores/reativar_colaborador.php',
+        data: {
+          'id_colaborador': idColaborador
+        },
+        success: function(retorno) {
+          alert(retorno['mensagem']);
+          if (retorno['status'] == 'ok') {
+            registrarLog('Reativação de Colaborador - ID: ' + idColaborador);
+            window.location.reload();
+          }
+        },
+        error: function(erro) {
+          alert('Ocorreu um erro na requisição: ' + erro);
+        }
+      });
     }
 
     // Adicionar Logs

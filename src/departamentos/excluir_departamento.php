@@ -14,7 +14,8 @@ if (empty($id_departamento)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'UPDATE departamentos set ativo = 0 
+  $sql = 'UPDATE departamentos 
+          SET ativo = 0 
           WHERE id_departamento = ?';
   $parametros = [$id_departamento];
   $banco->executarComando($sql, $parametros);
