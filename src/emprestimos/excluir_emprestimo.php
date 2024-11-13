@@ -14,7 +14,8 @@ if (empty($id_emprestimo)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
-  $sql = 'DELETE FROM emprestimos 
+  $sql = 'UPDATE emprestimos 
+          SET ativo = 0 
           WHERE id_emprestimo = ?';
   $parametros = [$id_emprestimo];
   $banco->executarComando($sql, $parametros);
@@ -27,7 +28,7 @@ try {
 } catch (PDOException $erro) {
   $resposta = [
     'status' => 'erro',
-    'mensagem' => 'Houve um erro ao tentar remover o usuário.'
+    'mensagem' => 'Houve um erro ao tentar remover o empréstimo.'
   ];
   echo json_encode($resposta);
 }

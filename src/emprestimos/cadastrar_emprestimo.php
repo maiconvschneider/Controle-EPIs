@@ -3,12 +3,11 @@
 $id = isset($_POST['id']) ? $_POST['id'] : '';
 $colaborador = isset($_POST['colaborador']) ? $_POST['colaborador'] : '';
 $data_emprestimo = isset($_POST['data_emprestimo']) ? $_POST['data_emprestimo'] : '';
-$status = isset($_POST['status']) ? $_POST['status'] : '';
 
-if (empty($colaborador) || empty($data_emprestimo) || empty($status) || !isset($_POST['equipamentos']) || count($_POST['equipamentos']) === 0) {
+if (empty($colaborador) || empty($data_emprestimo)) {
   $resposta = [
     'status' => 'erro',
-    'mensagem' => 'Por favor, preencha todos os campos e adicione ao menos um equipamento!'
+    'mensagem' => 'Por favor, preencha todos os campos da aba "Informações Gerais"!'
   ];
   echo json_encode($resposta);
   exit;
@@ -20,9 +19,9 @@ try {
   $banco = new BancoDeDados();
 
   if ($id == 'NOVO') {
-    $sql = 'INSERT INTO emprestimos (id_colaborador, id_usuario, data_emprestimo, status) 
-            VALUES (?, ?, ?, ?)';
-    $parametros = [$colaborador, $_COOKIE['id_usuario'], $data_emprestimo, $status];
+    $sql = "INSERT INTO emprestimos (id_colaborador, id_usuario, data_emprestimo, status) 
+            VALUES (?, ?, ?, 'Pendente')";
+    $parametros = [$colaborador, $_COOKIE['id_usuario'], $data_emprestimo];
     $banco->ExecutarComando($sql, $parametros);
 
     $id_emprestimo = $banco->conexao->lastInsertId();

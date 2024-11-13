@@ -26,7 +26,7 @@
               $banco = new BancodeDados;
 
               // Total de empréstimos
-              $sql = 'SELECT COUNT(*) AS total FROM emprestimos';
+              $sql = 'SELECT COUNT(*) AS total FROM emprestimos WHERE ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -49,7 +49,7 @@
               $banco = new BancodeDados;
 
               // Total de empréstimos abertos
-              $sql = 'SELECT COUNT(*) as total FROM emprestimos WHERE status != "Devolvido"';
+              $sql = 'SELECT COUNT(*) as total FROM emprestimos WHERE status != "Devolvido" and ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -72,7 +72,7 @@
               $banco = new BancodeDados;
 
               // Total de empréstimos devolvidos
-              $sql = 'SELECT COUNT(*) as total FROM emprestimos WHERE status = "Devolvido"';
+              $sql = 'SELECT COUNT(*) as total FROM emprestimos WHERE status = "Devolvido" and ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -101,8 +101,10 @@
           <tbody>
             <?php
             try {
-              $sql = 'SELECT e.*, c.nome AS colaborador FROM emprestimos e
-                      LEFT JOIN colaboradores c on c.id_colaborador = e.id_colaborador';
+              $sql =
+                'SELECT e.*, c.nome AS colaborador FROM emprestimos e
+                      LEFT JOIN colaboradores c on c.id_colaborador = e.id_colaborador
+                      WHERE e.ativo = 1';
               $dados = $banco->Consultar($sql, [], true);
               if ($dados) {
                 foreach ($dados as $linha) {
@@ -151,7 +153,7 @@
 
 <!-- Modal -->
 <div id="adicionar_emprestimo" class="modal fade" data-bs-backdrop="static" tabindex="-1" aria-labelledby="adicionar_emprestimoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Aumentei para modal-lg -->
     <div class="modal-content shadow-sm border-0">
       <form id="form_emprestimo" method="post" enctype="multipart/form-data" onsubmit="return false">
         <!-- Modal Header -->
@@ -162,7 +164,6 @@
 
         <!-- Modal Body -->
         <div class="modal-body" style="padding: 20px;">
-
           <!-- Nav Tabs -->
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
@@ -179,27 +180,19 @@
 
           <!-- Tab Content -->
           <div class="tab-content mt-3" id="myTabContent">
-
             <!-- Informações Gerais Tab -->
             <div class="tab-pane fade show active" id="geral" role="tabpanel" aria-labelledby="geral-tab">
               <input type="hidden" name="txt_id" id="txt_id" value="NOVO">
 
-              <!-- Data do Empréstimo, Data de Devolução e Status -->
-              <div class="form-group row mb-3">
+              <!-- Usuário Logado e Data do Empréstimo -->
+              <div class="row mb-3">
+                <div class="col-md-8">
+                  <label for="txt_usuario" class="form-label">Usuário Responsável</label>
+                  <input type="text" class="form-control bg-light" name="txt_usuario" id="txt_usuario" value="<?php echo $_SESSION['nome_usuario']; ?>" readonly>
+                </div>
                 <div class="col-md-4">
                   <label for="txt_data_emprestimo" class="form-label">Data Empréstimo</label>
                   <input type="date" class="form-control" name="txt_data_emprestimo" id="txt_data_emprestimo" required>
-                </div>
-                <div class="col-md-4">
-                  <label for="txt_data_devolucao" class="form-label">Data Devolução</label>
-                  <input type="date" class="form-control" name="txt_data_devolucao" id="txt_data_devolucao" required>
-                </div>
-                <div class="col-md-4">
-                  <label for="txt_status" class="form-label">Status</label>
-                  <select class="form-select" name="txt_status" id="txt_status" required>
-                    <option value="Pendente">Pendente</option>
-                    <option value="Devolvido">Devolvido</option>
-                  </select>
                 </div>
               </div>
 
@@ -230,55 +223,61 @@
 
             <!-- Equipamentos Tab -->
             <div class="tab-pane fade" id="equipamentos" role="tabpanel" aria-labelledby="equipamentos-tab">
-              <!-- Equipamento e Quantidade -->
-              <div class="form-group row mb-3">
-                <div class="col-md-6">
-                  <label for="txt_equipamento" class="form-label">Equipamento</label>
-                  <select class="form-select" name="txt_equipamento" id="txt_equipamento" required>
-                    <option value="">Selecione um equipamento</option>
-                    <?php
-                    function getEquipamentos()
-                    {
-                      include_once 'src/class/BancodeDados.php';
-                      $banco = new BancodeDados();
-                      $sql = 'SELECT id_equipamento, nome FROM equipamentos WHERE ativo = 1';
-                      return $banco->Consultar($sql, [], true);
-                    }
+              <!-- Card para adicionar equipamento -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row g-3 align-items-end">
+                    <div class="col-md-7">
+                      <label for="txt_equipamento" class="form-label">Equipamento</label>
+                      <select class="form-select" name="txt_equipamento" id="txt_equipamento" required>
+                        <option value="">Selecione um equipamento</option>
+                        <?php
+                        function getEquipamentos()
+                        {
+                          include_once 'src/class/BancodeDados.php';
+                          $banco = new BancodeDados();
+                          $sql = 'SELECT id_equipamento, nome FROM equipamentos WHERE ativo = 1';
+                          return $banco->Consultar($sql, [], true);
+                        }
 
-                    $equipamentos = getEquipamentos();
-                    if ($equipamentos) {
-                      foreach ($equipamentos as $equipamento) {
-                        echo "<option value='{$equipamento['id_equipamento']}'>{$equipamento['nome']}</option>";
-                      }
-                    }
-                    ?>
-                  </select>
-                </div>
-                <div class="col-md-2">
-                  <label for="txt_quantidade" class="form-label">Quantidade</label>
-                  <input type="number" class="form-control" name="txt_quantidade" id="txt_quantidade" min="1" required>
-                </div>
-                <div class="col-md-4 d-flex align-items-center justify-content-center">
-                  <button type="button" class="btn btn-primary w-100" id="adicionar_equipamento">
-                    <i class="bi bi-plus-lg"></i> Adicionar Equipamento
-                  </button>
+                        $equipamentos = getEquipamentos();
+                        if ($equipamentos) {
+                          foreach ($equipamentos as $equipamento) {
+                            echo "<option value='{$equipamento['id_equipamento']}'>{$equipamento['nome']}</option>";
+                          }
+                        }
+                        ?>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <label for="txt_quantidade" class="form-label">Quantidade</label>
+                      <input type="number" class="form-control" name="txt_quantidade" id="txt_quantidade" min="1" required>
+                    </div>
+                    <div class="col-md-3">
+                      <button type="button" class="btn btn-primary w-100" id="adicionar_equipamento">
+                        <i class="bi bi-plus-lg"></i> Adicionar
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
 
               <!-- Tabela de Equipamentos -->
-              <div class="form-group mt-3">
-                <table class="table table-hover" id="tabela_equipamentos">
-                  <thead class="table-light">
-                    <tr>
-                      <th>Equipamento</th>
-                      <th>Quantidade</th>
-                      <th>Ação</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- Equipamentos serão listados aqui dinamicamente -->
-                  </tbody>
-                </table>
+              <div class="card">
+                <div class="card-body p-0">
+                  <table class="table table-hover mb-0" id="tabela_equipamentos">
+                    <thead class="table-light">
+                      <tr>
+                        <th>Equipamento</th>
+                        <th style="width: 120px;">Quantidade</th>
+                        <th style="width: 100px;">Ação</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Equipamentos serão listados aqui dinamicamente -->
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -301,46 +300,53 @@
 <script>
   // Função para adicionar equipamento na tabela
   document.getElementById('adicionar_equipamento').addEventListener('click', function() {
-    let equipamento = document.getElementById('txt_equipamento');
-    let quantidade = document.getElementById('txt_quantidade');
-    let tableBody = document.querySelector('#tabela_equipamentos tbody');
+    // Seleciona os elementos necessários
+    const equipamento = document.getElementById('txt_equipamento');
+    const quantidade = document.getElementById('txt_quantidade');
+    const tableBody = document.querySelector('#tabela_equipamentos tbody');
 
-    if (equipamento.value && quantidade.value) {
-      let id_equipamento = equipamento.value;
+    // Verifica se o equipamento e a quantidade são válidos
+    if (equipamento.value && quantidade.value && parseInt(quantidade.value) > 0) {
+      const id_equipamento = equipamento.value;
+      const nome_equipamento = equipamento.options[equipamento.selectedIndex].text;
+      const quantidade_valida = quantidade.value;
 
-      let row = document.createElement('tr');
+      // Cria a nova linha da tabela
+      const row = document.createElement('tr');
 
-      let hiddenInput = document.createElement('input');
+      // Cria e adiciona o campo oculto para o ID do equipamento
+      const hiddenInput = document.createElement('input');
       hiddenInput.type = 'hidden';
       hiddenInput.value = id_equipamento;
       hiddenInput.classList.add('id_equipamento');
       row.appendChild(hiddenInput);
 
-      let equipamentoCell = document.createElement('td');
-      equipamentoCell.textContent = equipamento.options[equipamento.selectedIndex].text;
+      // Cria e adiciona a célula de equipamento
+      const equipamentoCell = document.createElement('td');
+      equipamentoCell.textContent = nome_equipamento;
       row.appendChild(equipamentoCell);
 
-      let quantidadeCell = document.createElement('td');
-      quantidadeCell.textContent = quantidade.value;
+      // Cria e adiciona a célula de quantidade
+      const quantidadeCell = document.createElement('td');
+      quantidadeCell.textContent = quantidade_valida;
       row.appendChild(quantidadeCell);
 
-      let actionCell = document.createElement('td');
-      actionCell.innerHTML = '<button type="button" class="btn btn-danger btn-sm remover_equipamento"> <i class = "bi bi-trash" > </i></button>';
+      // Cria e adiciona a célula de ação (remover)
+      const actionCell = document.createElement('td');
+      actionCell.innerHTML = '<button type="button" class="btn btn-danger btn-sm remover_equipamento"><i class="bi bi-trash"></i></button>';
       row.appendChild(actionCell);
-
       tableBody.appendChild(row);
 
+      // Adiciona o evento de remoção à linha
       row.querySelector('.remover_equipamento').addEventListener('click', function() {
         row.remove();
-        if (tableBody.children.length === 0) {
-          document.getElementById('txt_colaborador').disabled = false;
-        }
       });
 
+      // Limpa os campos após adicionar
       equipamento.value = '';
       quantidade.value = '';
     } else {
-      alert('Selecione um equipamento e informe a quantidade.');
+      alert('Selecione um equipamento e informe uma quantidade válida.');
     }
   });
 </script>
@@ -353,33 +359,31 @@
     var modal = new bootstrap.Modal(document.getElementById('adicionar_emprestimo'));
 
     $('#adicionar_emprestimo').on('show.bs.modal', function() {
-      var today = new Date();
-      var dd = String(today.getDate()).padStart(2, '0');
-      var mm = String(today.getMonth() + 1).padStart(2, '0');
-      var yyyy = today.getFullYear();
+      var dataAtual = new Date();
+      var dd = String(dataAtual.getDate()).padStart(2, '0');
+      var mm = String(dataAtual.getMonth() + 1).padStart(2, '0');
+      var yyyy = dataAtual.getFullYear();
 
-      today = yyyy + '-' + mm + '-' + dd;
+      dataAtual = yyyy + '-' + mm + '-' + dd;
 
       // Preenche o campo de data de empréstimo com a data atual
-      document.getElementById('txt_data_emprestimo').value = today;
+      document.getElementById('txt_data_emprestimo').value = dataAtual;
     });
   });
 
-  // Registro de Emprestimo
   function cadastrar() {
     var id = document.getElementById('txt_id').value;
     var colaborador = document.getElementById('txt_colaborador').value;
     var data_emprestimo = document.getElementById('txt_data_emprestimo').value;
-    var status = document.getElementById('txt_status').value;
 
     // Pegando os equipamentos adicionados à tabela
     var equipamentos = [];
     $('#tabela_equipamentos tbody tr').each(function() {
       var idEquipamento = $(this).find('.id_equipamento').val();
-      var qtdEquipamento = $(this).find('td:nth-child(3)').text();
+      var qtdEquipamento = $(this).find('td:nth-child(3)').text().trim();
 
       // Verifica se a quantidade é válida      
-      if (qtdEquipamento && parseInt(qtdEquipamento) > 0) {
+      if (idEquipamento && qtdEquipamento && parseInt(qtdEquipamento) > 0) {
         var equipamento = {
           id_equipamento: idEquipamento,
           qtd_equipamento: qtdEquipamento
@@ -393,7 +397,14 @@
       alert('Por favor, adicione ao menos um equipamento.');
       return;
     }
+    console.log('Dados enviados para o PHP:', {
+      id: id,
+      colaborador: colaborador,
+      data_emprestimo: data_emprestimo,
+      equipamentos: equipamentos
+    });
 
+    // Requisição AJAX
     $.ajax({
       type: 'post',
       dataType: 'json',
@@ -402,7 +413,6 @@
         'id': id,
         'colaborador': colaborador,
         'data_emprestimo': data_emprestimo,
-        'status': status,
         'equipamentos': equipamentos
       },
       success: function(retorno) {
