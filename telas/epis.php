@@ -126,6 +126,9 @@
                       </span>
                     </td>
                     <td class='text-end'>
+                      <button onclick=\"ajustarEstoque({$linha['id_equipamento']}, '{$linha['nome']}', {$linha['quantidade_total']})\" class='btn btn-sm btn-outline-warning rounded-pill me-1' title='Ajustar estoque'>
+                        <i class='bi bi-box-seam'></i>
+                      </button>
                       <button onclick='atualizar({$linha['id_equipamento']})' class='btn btn-sm btn-outline-primary rounded-pill me-1'>
                         <i class='bi bi-pencil'></i>
                       </button>
@@ -217,12 +220,114 @@
   </div>
 </div>
 
+<!-- Modal para ajustar quantidade -->
+<div id="ajuste_estoque" class="modal fade" data-bs-backdrop="static">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <form id="formAjusteEstoque" method="POST" action="src/actions/ajustar_estoque.php">
+        <div class="modal-header border-0" style="background: linear-gradient(135deg, #435d7d, #4a6da1);">
+          <h4 class="modal-title text-white">Ajuste de Estoque</h4>
+          <button type="reset" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
+        </div>
+        <div class="modal-body p-4">
+          <input type="hidden" id="id_equipamento" name="id_equipamento">
+
+          <div class="mb-3">
+            <label for="nome_equipamento" class="form-label">Equipamento</label>
+            <div class="input-group">
+              <span class="input-group-text bg-light border-0">
+                <i class="bi bi-tools"></i>
+              </span>
+              <input type="text" class="form-control border-0 bg-light" id="nome_equipamento" readonly>
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <div class="col-md-6">
+              <label for="qtd_atual" class="form-label">Quantidade Atual</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-box"></i>
+                </span>
+                <input type="number" class="form-control border-0 bg-light" id="qtd_atual" readonly>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="nova_quantidade" class="form-label">Nova Quantidade</label>
+              <div class="input-group">
+                <span class="input-group-text bg-light border-0">
+                  <i class="bi bi-box-seam"></i>
+                </span>
+                <input type="number" class="form-control border-0 bg-light" name="nova_quantidade" id="nova_quantidade" required min="0">
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="modal-footer border-0 bg-light">
+          <button type="reset" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success rounded-pill px-4" onclick="ajustarQtdEstoque()">Confirmar Ajuste</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
   $('#form_epi').submit(function() {
     return false;
   });
+
+  function ajustarEstoque(id, nome, qtd_total) {
+    document.getElementById('id_equipamento').value = id;
+    document.getElementById('nome_equipamento').value = nome;
+    document.getElementById('qtd_atual').value = qtd_total;
+
+    const modal = new bootstrap.Modal(document.getElementById('ajuste_estoque'));
+    modal.show();
+  }
+
+  function ajustarQtdEstoque() {
+    var idEquipamento = document.getElementById('id_equipamento').value;
+    var novaQuantidade = document.getElementById('nova_quantidade').value;
+
+    if (novaQuantidade === '') {
+      alert('Por favor, insira a nova quantidade!');
+      return;
+    }
+
+    if (isNaN(novaQuantidade) || novaQuantidade <= 0) {
+      alert('Por favor, insira uma quantidade válida (maior que zero)!');
+      return;
+    }
+
+    $.ajax({
+      type: 'POST',
+      url: 'src/epis/ajustar_estoque_epi.php',
+      data: {
+        'id_equipamento': idEquipamento,
+        'nova_quantidade': novaQuantidade
+      },
+      dataType: 'json',
+      success: function(response) {
+        if (response.status == 'ok') {
+          alert('Ajuste de estoque realizado com sucesso!')
+          var modal = bootstrap.Modal.getInstance(document.getElementById('ajuste_estoque'));
+          modal.hide();
+          window.location.reload();
+        } else {
+          alert('Erro ao ajustar o estoque: ' + response.mensagem);
+        }
+      },
+      error: function(xhr, status, error) {
+        alert('Ocorreu um erro ao tentar ajustar o estoque: ' + error);
+      }
+    });
+  }
+
 
   // Cadastro de Equipamento
   function cadastrar() {
