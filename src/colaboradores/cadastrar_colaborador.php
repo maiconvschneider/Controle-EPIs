@@ -2,7 +2,7 @@
 // Validação
 $id = isset($_POST['id']) ? $_POST['id'] : '';
 $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
-$matricula = isset($_POST['matricula']) ? $_POST['matricula'] : '';
+$cpf = isset($_POST['cpf']) ? $_POST['cpf'] : '';
 $id_departamento = $_POST['departamento'] ?? null;
 $email = isset($_POST['email']) ? $_POST['email'] : '';
 
@@ -15,7 +15,7 @@ $bairro = isset($_POST['bairro']) ? $_POST['bairro'] : '';
 $uf = isset($_POST['uf']) ? $_POST['uf'] : '';
 $cidade = isset($_POST['cidade']) ? $_POST['cidade'] : '';
 
-if (empty($nome) || empty($matricula) || empty($id_departamento) || empty($email)) {
+if (empty($nome) || empty($cpf) || empty($id_departamento) || empty($email)) {
   $resposta = [
     'status' => 'erro',
     'mensagem' => 'Por favor, preencha todos os campos!'
@@ -47,9 +47,9 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') { // Cadastrar
-    $sql = 'INSERT INTO colaboradores (nome, matricula, id_departamento, email) 
+    $sql = 'INSERT INTO colaboradores (nome, cpf, id_departamento, email) 
             VALUES (?, ?, ?, ?)';
-    $parametros = [$nome, $matricula, $id_departamento, $email];
+    $parametros = [$nome, $cpf, $id_departamento, $email];
     $banco->ExecutarComando($sql, $parametros);
 
     // Pegar o ID do colaborador cadastrado
@@ -60,9 +60,9 @@ try {
       ];
   } else { // Atualizar
     $sql = 'UPDATE colaboradores 
-            SET nome = ?, matricula = ?, id_departamento = ?, email = ? 
+            SET nome = ?, cpf = ?, id_departamento = ?, email = ? 
             WHERE id_colaborador = ?';
-    $parametros = [$nome, $matricula, $id_departamento, $email, $id];
+    $parametros = [$nome, $cpf, $id_departamento, $email, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $id_colaborador = $id;

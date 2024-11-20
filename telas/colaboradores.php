@@ -107,7 +107,7 @@
                 <tr>
                   <th scope="col">ID</th>
                   <th scope="col">Nome</th>
-                  <th scope="col">Matrícula</th>
+                  <th scope="col">CPF</th>
                   <th scope="col">Departamento</th>
                   <th scope="col">Email</th>
                   <th scope="col" class="text-end">Ações</th>
@@ -136,7 +136,7 @@
                           {$linha['nome']}
                         </div>
                       </td>
-                      <td><span class='badge rounded-pill bg-secondary'>{$linha['matricula']}</span></td>
+                      <td><span class='badge rounded-pill bg-secondary'>{$linha['cpf']}</span></td>
                       <td>
                         <span class='badge rounded-pill bg-info text-dark'>
                           <i class='bi bi-building me-1'></i>{$linha['departamento']}
@@ -183,7 +183,7 @@
                 <tr>
                   <th scope="col">ID</th>
                   <th scope="col">Nome</th>
-                  <th scope="col">Matrícula</th>
+                  <th scope="col">CPF</th>
                   <th scope="col">Departamento</th>
                   <th scope="col">Email</th>
                   <th scope="col" class="text-end">Ações</th>
@@ -210,7 +210,7 @@
                           {$linha['nome']}
                         </div>
                       </td>
-                      <td><span class='badge rounded-pill bg-secondary'>{$linha['matricula']}</span></td>
+                      <td><span class='badge rounded-pill bg-secondary'>{$linha['cpf']}</span></td>
                       <td>
                         <span class='badge rounded-pill bg-info text-dark'>
                           <i class='bi bi-building me-1'></i>{$linha['departamento']}
@@ -292,12 +292,12 @@
                     </div>
                   </div>
                   <div class="col-4">
-                    <label for="txt_matricula" class="form-label">Matrícula</label>
+                    <label for="txt_cpf" class="form-label">CPF</label>
                     <div class="input-group">
                       <span class="input-group-text bg-light border-0">
                         <i class="bi bi-hash"></i>
                       </span>
-                      <input type="text" class="form-control border-0 bg-light" name="txt_matricula" id="txt_matricula" required>
+                      <input type="text" class="form-control border-0 bg-light" name="txt_cpf" id="txt_cpf" maxlength="14" required>
                     </div>
                   </div>
                 </div>
@@ -539,7 +539,7 @@
     function cadastrar() {
       var id = document.getElementById('txt_id').value;
       var nome = document.getElementById('txt_nome').value;
-      var matricula = document.getElementById('txt_matricula').value;
+      var cpf = document.getElementById('txt_cpf').value;
       var departamento = document.getElementById('list_departamento').value;
       var email = document.getElementById('txt_email').value;
       var cep = document.getElementById('txt_cep').value;
@@ -557,7 +557,7 @@
         data: {
           'id': id,
           'nome': nome,
-          'matricula': matricula,
+          'cpf': cpf,
           'departamento': departamento,
           'email': email,
           'cep': cep,
@@ -606,7 +606,7 @@
           if (retorno['status'] == 'ok') {
             document.getElementById('txt_id').value = retorno['dados']['id_colaborador'];
             document.getElementById('txt_nome').value = retorno['dados']['nome'];
-            document.getElementById('txt_matricula').value = retorno['dados']['matricula'];
+            document.getElementById('txt_cpf').value = retorno['dados']['cpf'];
             document.getElementById('list_departamento').value = retorno['dados']['id_departamento'];
             document.getElementById('txt_email').value = retorno['dados']['email'];
             document.getElementById('txt_cep').value = retorno['dados']['cep'];
