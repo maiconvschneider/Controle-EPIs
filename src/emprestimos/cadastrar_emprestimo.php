@@ -1,8 +1,11 @@
 <?php
+date_default_timezone_set('America/Sao_Paulo');
+
 // Validação
 $id = isset($_POST['id']) ? $_POST['id'] : '';
 $colaborador = isset($_POST['colaborador']) ? $_POST['colaborador'] : '';
 $data_emprestimo = isset($_POST['data_emprestimo']) ? $_POST['data_emprestimo'] : '';
+$data_emprestimo = $data_emprestimo . ' ' . date('H:i:s');
 
 if (empty($colaborador) || empty($data_emprestimo)) {
   $resposta = [

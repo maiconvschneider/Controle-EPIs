@@ -14,6 +14,30 @@ if (empty($id_emprestimo)) {
 try {
   include '../class/BancoDeDados.php';
   $banco = new BancoDeDados;
+
+  $sql = 'SELECT status 
+                  FROM emprestimos 
+                  WHERE id_emprestimo = ?';
+  $resultado = $banco->Consultar($sql, [$id_emprestimo]);
+
+  if (!$resultado) {
+    $resposta = [
+      'status' => 'erro',
+      'mensagem' => 'Empréstimo não encontrado!'
+    ];
+    echo json_encode($resposta);
+    exit;
+  }
+
+  if ($resultado['status'] === 'Pendente') {
+    $resposta = [
+      'status' => 'erro',
+      'mensagem' => 'Não é possível excluir um empréstimo com status Pendente!'
+    ];
+    echo json_encode($resposta);
+    exit;
+  }
+
   $sql = 'UPDATE emprestimos 
           SET ativo = 0 
           WHERE id_emprestimo = ?';

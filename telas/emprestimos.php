@@ -108,12 +108,19 @@
               $dados = $banco->Consultar($sql, [], true);
               if ($dados) {
                 foreach ($dados as $linha) {
+                  $dataEmprestimoFormatada = date('d/m/Y H:i', strtotime($linha['data_emprestimo']));
+
+                  // Verifica se a data de devolução está preenchida
+                  $dataDevolucaoFormatada = !empty($linha['data_devolucao'])
+                    ? date('d/m/Y H:i', strtotime($linha['data_devolucao']))
+                    : '';
+
                   echo "
                   <tr>
                     <td>{$linha['id_emprestimo']}</td>
                     <td>{$linha['colaborador']}</td>
-                    <td>{$linha['data_emprestimo']}</td>
-                    <td>{$linha['data_devolucao']}</td>
+                    <td>{$dataEmprestimoFormatada}</td>
+                    <td>{$dataDevolucaoFormatada}</td>
                     <td>
                       <span class='badge rounded-pill bg-" . ($linha['status'] == 'Devolvido' ? 'success' : 'warning') . "'>
                         {$linha['status']}
@@ -397,12 +404,6 @@
       alert('Por favor, adicione ao menos um equipamento.');
       return;
     }
-    console.log('Dados enviados para o PHP:', {
-      id: id,
-      colaborador: colaborador,
-      data_emprestimo: data_emprestimo,
-      equipamentos: equipamentos
-    });
 
     // Requisição AJAX
     $.ajax({

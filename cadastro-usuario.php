@@ -104,7 +104,7 @@
         },
         success: function(retorno) {
           if (retorno['status'] == 'ok') {
-            alert(retorno['mensagem']);
+            alert('Usuário cadastrado com sucesso!');
             window.location = 'index.php';
           } else {
             alert(retorno['mensagem']);
