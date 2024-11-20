@@ -3,8 +3,9 @@
 $id = isset($_POST['id']) ? $_POST['id'] : '';
 $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
 $cpf = isset($_POST['cpf']) ? $_POST['cpf'] : '';
-$id_departamento = $_POST['departamento'] ?? null;
+$data_nascimento = isset($_POST['data_nascimento']) ? $_POST['data_nascimento'] : '';
 $email = isset($_POST['email']) ? $_POST['email'] : '';
+$id_departamento = $_POST['departamento'] ?? null;
 
 // Endereço
 $cep = isset($_POST['cep']) ? $_POST['cep'] : '';
@@ -47,9 +48,9 @@ try {
   $banco = new BancoDeDados;
 
   if ($id == 'NOVO') { // Cadastrar
-    $sql = 'INSERT INTO colaboradores (nome, cpf, id_departamento, email) 
-            VALUES (?, ?, ?, ?)';
-    $parametros = [$nome, $cpf, $id_departamento, $email];
+    $sql = 'INSERT INTO colaboradores (nome, cpf, data_nascimento, id_departamento, email) 
+            VALUES (?, ?, ?, ?, ?)';
+    $parametros = [$nome, $cpf, $data_nascimento, $id_departamento, $email];
     $banco->ExecutarComando($sql, $parametros);
 
     // Pegar o ID do colaborador cadastrado
@@ -60,9 +61,9 @@ try {
       ];
   } else { // Atualizar
     $sql = 'UPDATE colaboradores 
-            SET nome = ?, cpf = ?, id_departamento = ?, email = ? 
+            SET nome = ?, cpf = ?, data_nascimento = ?, id_departamento = ?, email = ? 
             WHERE id_colaborador = ?';
-    $parametros = [$nome, $cpf, $id_departamento, $email, $id];
+    $parametros = [$nome, $cpf, $data_nascimento, $id_departamento, $email, $id];
     $banco->ExecutarComando($sql, $parametros);
 
     $id_colaborador = $id;

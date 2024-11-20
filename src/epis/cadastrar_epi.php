@@ -6,10 +6,10 @@ $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : '';
 $qtd_total = isset($_POST['qtd_total']) ? $_POST['qtd_total'] : '0';
 $qtd_disp = isset($_POST['qtd_disp']) ? $_POST['qtd_disp'] : '0';
 
-if (empty($nome) || empty($descricao)) {
+if (empty($nome)) {
   $resposta = [
     'status' => 'erro',
-    'mensagem' => 'Por favor, preencha todos os campos!'
+    'mensagem' => 'Por favor, preencha o nome do equipamento!'
   ];
   echo json_encode($resposta);
   exit;

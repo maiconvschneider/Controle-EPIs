@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS `db_epis`.`colaboradores` (
   `id_colaborador` INT(11) NOT NULL AUTO_INCREMENT,
   `nome` VARCHAR(255) NULL DEFAULT NULL,
   `cpf` VARCHAR(11) NULL DEFAULT NULL,
+  `data_nascimento` DATE NULL DEFAULT NULL,
   `id_departamento` INT(11) NOT NULL,
   `email` VARCHAR(255) NULL DEFAULT NULL,
   `ativo` TINYINT(4) NULL DEFAULT 1,

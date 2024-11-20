@@ -108,6 +108,7 @@
                   <th scope="col">ID</th>
                   <th scope="col">Nome</th>
                   <th scope="col">CPF</th>
+                  <th scope="col">Nascimento</th>
                   <th scope="col">Departamento</th>
                   <th scope="col">Email</th>
                   <th scope="col" class="text-end">Ações</th>
@@ -125,46 +126,48 @@
                   $dadosAtivos = $banco->Consultar($sqlAtivos, [], true);
                   if ($dadosAtivos) {
                     foreach ($dadosAtivos as $linha) {
+                      $dataNascimento = (new DateTime($linha['data_nascimento']))->format('d/m/Y');
                       echo "
-                    <tr>
-                      <td>{$linha['id_colaborador']}</td>
-                      <td>
-                        <div class='d-flex align-items-center'>
-                          <div class='rounded-circle bg-light p-2 me-2'>
-                            <i class='bi bi-person'></i>
+                      <tr>
+                        <td>{$linha['id_colaborador']}</td>
+                        <td>
+                          <div class='d-flex align-items-center'>
+                            <div class='rounded-circle bg-light p-2 me-2'>
+                              <i class='bi bi-person'></i>
+                            </div>
+                            {$linha['nome']}
                           </div>
-                          {$linha['nome']}
-                        </div>
-                      </td>
-                      <td><span class='badge rounded-pill bg-secondary'>{$linha['cpf']}</span></td>
-                      <td>
-                        <span class='badge rounded-pill bg-info text-dark'>
-                          <i class='bi bi-building me-1'></i>{$linha['departamento']}
-                        </span>
-                      </td>
-                      <td>
-                        <small><i class='bi bi-envelope me-1'></i>{$linha['email']}</small>
-                      </td>
-                      <td class='text-end'>
-                        <button onclick='atualizar({$linha['id_colaborador']})' class='btn btn-sm btn-outline-primary rounded-pill me-1'>
-                          <i class='bi bi-pencil'></i>
-                        </button>
-                        <button onclick='excluir({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger rounded-pill'>
-                          <i class='bi bi-trash'></i>
-                        </button>
-                      </td>
-                    </tr>";
+                        </td>
+                        <td><span class='badge rounded-pill bg-secondary'>{$linha['cpf']}</span></td>
+                        <td>{$dataNascimento}</td>
+                        <td>
+                          <span class='badge rounded-pill bg-info text-dark'>
+                            <i class='bi bi-building me-1'></i>{$linha['departamento']}
+                          </span>
+                        </td>
+                        <td>
+                          <small><i class='bi bi-envelope me-1'></i>{$linha['email']}</small>
+                        </td>
+                        <td class='text-end'>
+                          <button onclick='atualizar({$linha['id_colaborador']})' class='btn btn-sm btn-outline-primary rounded-pill me-1'>
+                            <i class='bi bi-pencil'></i>
+                          </button>
+                          <button onclick='excluir({$linha['id_colaborador']})' class='btn btn-sm btn-outline-danger rounded-pill'>
+                            <i class='bi bi-trash'></i>
+                          </button>
+                        </td>
+                      </tr>";
                     }
                   } else {
                     echo "
-                  <tr>
-                    <td colspan='6' class='text-center py-4'>
-                      <div class='text-muted'>
-                        <i class='bi bi-inbox-fill' style='font-size: 2rem;'></i>
-                        <p class='mt-2 mb-0'>Nenhum colaborador ativo...</p>
-                      </div>
-                    </td>
-                  </tr>";
+                    <tr>
+                      <td colspan='6' class='text-center py-4'>
+                        <div class='text-muted'>
+                          <i class='bi bi-inbox-fill' style='font-size: 2rem;'></i>
+                          <p class='mt-2 mb-0'>Nenhum colaborador ativo...</p>
+                        </div>
+                      </td>
+                    </tr>";
                   }
                 } catch (PDOException $erro) {
                   echo "<script>alert('{$erro->getMessage()}');</script>";
@@ -184,6 +187,7 @@
                   <th scope="col">ID</th>
                   <th scope="col">Nome</th>
                   <th scope="col">CPF</th>
+                  <th scope="col">Nascimento</th>
                   <th scope="col">Departamento</th>
                   <th scope="col">Email</th>
                   <th scope="col" class="text-end">Ações</th>
@@ -199,43 +203,45 @@
                   $dados = $banco->Consultar($sql, [], true);
                   if ($dados) {
                     foreach ($dados as $linha) {
+                      $dataNascimento = (new DateTime($linha['data_nascimento']))->format('d/m/Y');
                       echo "
-                    <tr>
-                      <td>{$linha['id_colaborador']}</td>
-                      <td>
-                        <div class='d-flex align-items-center'>
-                          <div class='rounded-circle bg-light p-2 me-2'>
-                            <i class='bi bi-person'></i>
+                      <tr>
+                        <td>{$linha['id_colaborador']}</td>
+                        <td>
+                          <div class='d-flex align-items-center'>
+                            <div class='rounded-circle bg-light p-2 me-2'>
+                              <i class='bi bi-person'></i>
+                            </div>
+                            {$linha['nome']}
                           </div>
-                          {$linha['nome']}
-                        </div>
-                      </td>
-                      <td><span class='badge rounded-pill bg-secondary'>{$linha['cpf']}</span></td>
-                      <td>
-                        <span class='badge rounded-pill bg-info text-dark'>
-                          <i class='bi bi-building me-1'></i>{$linha['departamento']}
-                        </span>
-                      </td>
-                      <td>
-                        <small><i class='bi bi-envelope me-1'></i>{$linha['email']}</small>
-                      </td>
-                      <td class='text-end'>
-                        <button onclick='reativar({$linha['id_colaborador']})' class='btn btn-sm btn-outline-success rounded-pill me-1'>
-                          <i class='bi bi-check-circle'></i> Reativar
-                        </button>
-                      </td>
-                    </tr>";
+                        </td>
+                        <td><span class='badge rounded-pill bg-secondary'>{$linha['cpf']}</span></td>
+                        <td>{$dataNascimento}</td>
+                        <td>
+                          <span class='badge rounded-pill bg-info text-dark'>
+                            <i class='bi bi-building me-1'></i>{$linha['departamento']}
+                          </span>
+                        </td>
+                        <td>
+                          <small><i class='bi bi-envelope me-1'></i>{$linha['email']}</small>
+                        </td>
+                        <td class='text-end'>
+                          <button onclick='reativar({$linha['id_colaborador']})' class='btn btn-sm btn-outline-success rounded-pill me-1'>
+                            <i class='bi bi-check-circle'></i> Reativar
+                          </button>
+                        </td>
+                      </tr>";
                     }
                   } else {
                     echo "
-                  <tr>
-                    <td colspan='6' class='text-center py-4'>
-                      <div class='text-muted'>
-                        <i class='bi bi-inbox-fill' style='font-size: 2rem;'></i>
-                        <p class='mt-2 mb-0'>Nenhum colaborador inativo...</p>
-                      </div>
-                    </td>
-                  </tr>";
+                    <tr>
+                      <td colspan='6' class='text-center py-4'>
+                        <div class='text-muted'>
+                          <i class='bi bi-inbox-fill' style='font-size: 2rem;'></i>
+                          <p class='mt-2 mb-0'>Nenhum colaborador inativo...</p>
+                        </div>
+                      </td>
+                    </tr>";
                   }
                 } catch (PDOException $erro) {
                   echo "<script>alert('{$erro->getMessage()}');</script>";
@@ -295,7 +301,7 @@
                     <label for="txt_cpf" class="form-label">CPF</label>
                     <div class="input-group">
                       <span class="input-group-text bg-light border-0">
-                        <i class="bi bi-hash"></i>
+                        <i class="bi bi-person-vcard"></i>
                       </span>
                       <input type="text" class="form-control border-0 bg-light" name="txt_cpf" id="txt_cpf" maxlength="14" required>
                     </div>
@@ -303,7 +309,28 @@
                 </div>
 
                 <div class="row mb-3">
-                  <div class="col-6">
+                  <div class="col-4">
+                    <label for="txt_data_nascimento" class="form-label">Data de Nascimento</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-0">
+                        <i class="bi bi-calendar-event"></i>
+                      </span>
+                      <input type="date" class="form-control border-0 bg-light" name="txt_data_nascimento" id="txt_data_nascimento" required>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <label for="txt_email" class="form-label">Email</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-light border-0">
+                        <i class="bi bi-envelope"></i>
+                      </span>
+                      <input type="email" class="form-control border-0 bg-light" name="txt_email" id="txt_email" required>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-12">
                     <label for="list_departamento" class="form-label">Departamento</label>
                     <div class="input-group">
                       <span class="input-group-text bg-light border-0">
@@ -333,15 +360,6 @@
                         }
                         ?>
                       </select>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <label for="txt_email" class="form-label">Email</label>
-                    <div class="input-group">
-                      <span class="input-group-text bg-light border-0">
-                        <i class="bi bi-envelope"></i>
-                      </span>
-                      <input type="email" class="form-control border-0 bg-light" name="txt_email" id="txt_email" required>
                     </div>
                   </div>
                 </div>
@@ -540,6 +558,7 @@
       var id = document.getElementById('txt_id').value;
       var nome = document.getElementById('txt_nome').value;
       var cpf = document.getElementById('txt_cpf').value;
+      var data_nascimento = document.getElementById('txt_data_nascimento').value;
       var departamento = document.getElementById('list_departamento').value;
       var email = document.getElementById('txt_email').value;
       var cep = document.getElementById('txt_cep').value;
@@ -558,6 +577,7 @@
           'id': id,
           'nome': nome,
           'cpf': cpf,
+          'data_nascimento': data_nascimento,
           'departamento': departamento,
           'email': email,
           'cep': cep,
@@ -607,6 +627,7 @@
             document.getElementById('txt_id').value = retorno['dados']['id_colaborador'];
             document.getElementById('txt_nome').value = retorno['dados']['nome'];
             document.getElementById('txt_cpf').value = retorno['dados']['cpf'];
+            document.getElementById('txt_data_nascimento').value = retorno['dados']['data_nascimento'];
             document.getElementById('list_departamento').value = retorno['dados']['id_departamento'];
             document.getElementById('txt_email').value = retorno['dados']['email'];
             document.getElementById('txt_cep').value = retorno['dados']['cep'];

@@ -4,10 +4,10 @@ $id = isset($_POST['id']) ? $_POST['id'] : '';
 $nome = isset($_POST['nome']) ? $_POST['nome'] : '';
 $descricao = isset($_POST['descricao']) ? $_POST['descricao'] : '';
 
-if (empty($nome) || empty($descricao)) {
+if (empty($nome)) {
   $resposta = [
     'status' => 'erro',
-    'mensagem' => 'Por favor, preencha todos os campos!'
+    'mensagem' => 'Por favor, preencha o nome do departamento!'
   ];
   echo json_encode($resposta);
   exit;
