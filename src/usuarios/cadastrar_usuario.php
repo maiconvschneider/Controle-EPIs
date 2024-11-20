@@ -6,14 +6,14 @@ $usuario = isset($_POST['usuario']) ? $_POST['usuario'] : '';
 $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
 $tipo = isset($_POST['tipo']) ? $_POST['tipo'] : 'U';
 
-// if (empty($nome) || empty($usuario) || empty($senha)) {
-  // $resposta = [
-    // 'status' => 'erro',
-    // 'mensagem' => 'Por favor, preencha todos os campos!'
-  // ];
-  // echo json_encode($resposta);
-  // exit;
-// }
+if (empty($nome) || empty($usuario) || empty($senha)) {
+  $resposta = [
+    'status' => 'erro',
+    'mensagem' => 'Por favor, preencha todos os campos!'
+  ];
+  echo json_encode($resposta);
+  exit;
+}
 
 // Banco de Dados
 try {
