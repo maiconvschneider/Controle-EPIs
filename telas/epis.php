@@ -126,6 +126,9 @@
                       </span>
                     </td>
                     <td class='text-end'>
+                      <button onclick='gerarCodigoBarras({$linha['id_equipamento']})' class='btn btn-sm btn-outline-info rounded-pill me-1'>
+                        <i class='bi bi-upc-scan'></i>
+                      </button>                      
                       <button onclick=\"ajustarEstoque({$linha['id_equipamento']}, '{$linha['nome']}', {$linha['quantidade_total']})\" class='btn btn-sm btn-outline-warning rounded-pill me-1' title='Ajustar estoque'>
                         <i class='bi bi-box-seam'></i>
                       </button>
@@ -274,13 +277,22 @@
   </div>
 </div>
 
+<!-- Modal para código de barras -->
+<div id="codigo_barras" class="modal fade" data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Código de Barras</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <img src="" id="img_barras">
+    </div>
+  </div>
+</div>
+
 <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
-  $('#form_epi').submit(function() {
-    return false;
-  });
-
   function ajustarEstoque(id, nome, qtd_total) {
     document.getElementById('id_equipamento').value = id;
     document.getElementById('nome_equipamento').value = nome;
@@ -306,12 +318,12 @@
 
     $.ajax({
       type: 'POST',
+      dataType: 'json',
       url: 'src/epis/ajustar_estoque_epi.php',
       data: {
         'id_equipamento': idEquipamento,
         'nova_quantidade': novaQuantidade
       },
-      dataType: 'json',
       success: function(response) {
         if (response.status == 'ok') {
           alert('Ajuste de estoque realizado com sucesso!')
@@ -322,8 +334,8 @@
           alert('Erro ao ajustar o estoque: ' + response.mensagem);
         }
       },
-      error: function(xhr, status, error) {
-        alert('Ocorreu um erro ao tentar ajustar o estoque: ' + error);
+      error: function(erro) {
+        alert('Ocorreu um erro ao ajustar o estoque: ' + erro);
       }
     });
   }
@@ -417,6 +429,13 @@
         }
       });
     }
+  }
+
+  function gerarCodigoBarras(id_equipamento) {
+    var barcodeUrl = 'https://www.barcodesinc.com/generator/image.php?code=' + id_equipamento + '&style=197&type=C128B&width=300&height=100&xres=1&font=3';
+    $('#img_barras').attr('src', barcodeUrl);
+    var modal = new bootstrap.Modal(document.getElementById('codigo_barras'));
+    modal.show();
   }
 
   // Adicionar Logs
