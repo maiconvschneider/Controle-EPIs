@@ -1,5 +1,4 @@
 <div class="container-fluid py-4">
-  <!-- Cabeçalho com botão voltar -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <a href="sistema.php" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
       <i class="bi bi-arrow-left"></i>
@@ -10,7 +9,7 @@
     </button>
   </div>
 
-  <!-- Cards de estatísticas -->
+  <!-- Estatísticas -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card shadow-sm border-0 mb-3">
@@ -157,7 +156,7 @@
   </div>
 </div>
 
-<!-- Modal (mantido o mesmo, apenas estilizado) -->
+<!-- Modal -->
 <div id="adicionar_usuario" class="modal fade" data-bs-backdrop="static">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow">

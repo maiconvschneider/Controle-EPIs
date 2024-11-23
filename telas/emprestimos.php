@@ -1,5 +1,4 @@
 <div class="container-fluid py-4">
-  <!-- Header with back button and page title -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <a href="sistema.php" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
       <i class="bi bi-arrow-left"></i>
@@ -10,7 +9,7 @@
     </button>
   </div>
 
-  <!-- Estatísticas de Empréstimos -->
+  <!-- Estatísticas -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card shadow-sm border-0 mb-3">
@@ -83,7 +82,7 @@
     </div>
   </div>
 
-  <!-- Empréstimos Table -->
+  <!-- Tabela de Empréstimos -->
   <div class="card shadow-sm border-0">
     <div class="card-body">
       <div class="table-responsive">
@@ -127,7 +126,7 @@
                       </span>
                     </td>
                     <td class='text-end'>
-                      <button onclick='devolver({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-primary rounded-pill me-1'>
+                      <button onclick='devolver({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-primary rounded-pill me-1' title='Devolver'>
                         <i class='bi bi-arrow-repeat'></i>
                       </button>
                       <button onclick='excluir({$linha['id_emprestimo']})' class='btn btn-sm btn-outline-danger rounded-pill'>
@@ -163,15 +162,12 @@
   <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Aumentei para modal-lg -->
     <div class="modal-content shadow-sm border-0">
       <form id="form_emprestimo" method="post" enctype="multipart/form-data" onsubmit="return false">
-        <!-- Modal Header -->
         <div class="modal-header" style="background-color: #435d7d; color: #fff;">
           <h5 class="modal-title" id="adicionar_emprestimoLabel">Empréstimo</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true" style="opacity: 0.8;"></button>
         </div>
 
-        <!-- Modal Body -->
         <div class="modal-body" style="padding: 20px;">
-          <!-- Nav Tabs -->
           <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
               <a class="nav-link active" id="geral-tab" data-bs-toggle="tab" href="#geral" role="tab" aria-controls="geral" aria-selected="true">
@@ -185,13 +181,10 @@
             </li>
           </ul>
 
-          <!-- Tab Content -->
           <div class="tab-content mt-3" id="myTabContent">
-            <!-- Informações Gerais Tab -->
             <div class="tab-pane fade show active" id="geral" role="tabpanel" aria-labelledby="geral-tab">
               <input type="hidden" name="txt_id" id="txt_id" value="NOVO">
 
-              <!-- Usuário Logado e Data do Empréstimo -->
               <div class="row mb-3">
                 <div class="col-md-8">
                   <label for="txt_usuario" class="form-label">Usuário Responsável</label>
@@ -203,7 +196,6 @@
                 </div>
               </div>
 
-              <!-- Colaborador -->
               <div class="form-group mb-3">
                 <label for="txt_colaborador" class="form-label">Colaborador</label>
                 <select class="form-select" name="txt_colaborador" id="txt_colaborador" required>
@@ -228,9 +220,7 @@
               </div>
             </div>
 
-            <!-- Equipamentos Tab -->
             <div class="tab-pane fade" id="equipamentos" role="tabpanel" aria-labelledby="equipamentos-tab">
-              <!-- Card para adicionar equipamento -->
               <div class="card mb-3">
                 <div class="card-body">
                   <div class="row g-3 align-items-end">
@@ -269,7 +259,6 @@
                 </div>
               </div>
 
-              <!-- Tabela de Equipamentos -->
               <div class="card">
                 <div class="card-body p-0">
                   <table class="table table-hover mb-0" id="tabela_equipamentos">
@@ -281,7 +270,6 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <!-- Equipamentos serão listados aqui dinamicamente -->
                     </tbody>
                   </table>
                 </div>
@@ -290,7 +278,6 @@
           </div>
         </div>
 
-        <!-- Modal Footer -->
         <div class="modal-footer" style="background-color: #f7f7f7;">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
             <i class="bi bi-x-circle"></i> Cancelar
@@ -318,27 +305,25 @@
       const nome_equipamento = equipamento.options[equipamento.selectedIndex].text;
       const quantidade_valida = quantidade.value;
 
-      // Cria a nova linha da tabela
       const row = document.createElement('tr');
-
-      // Cria e adiciona o campo oculto para o ID do equipamento
       const hiddenInput = document.createElement('input');
+
       hiddenInput.type = 'hidden';
       hiddenInput.value = id_equipamento;
       hiddenInput.classList.add('id_equipamento');
       row.appendChild(hiddenInput);
 
-      // Cria e adiciona a célula de equipamento
+      // equipamento
       const equipamentoCell = document.createElement('td');
       equipamentoCell.textContent = nome_equipamento;
       row.appendChild(equipamentoCell);
 
-      // Cria e adiciona a célula de quantidade
+      // quantidade
       const quantidadeCell = document.createElement('td');
       quantidadeCell.textContent = quantidade_valida;
       row.appendChild(quantidadeCell);
 
-      // Cria e adiciona a célula de ação (remover)
+      // ação (remover)
       const actionCell = document.createElement('td');
       actionCell.innerHTML = '<button type="button" class="btn btn-danger btn-sm remover_equipamento"><i class="bi bi-trash"></i></button>';
       row.appendChild(actionCell);
@@ -399,13 +384,11 @@
       }
     });
 
-    // Verifica se há equipamentos para enviar
     if (equipamentos.length === 0) {
       alert('Por favor, adicione ao menos um equipamento.');
       return;
     }
 
-    // Requisição AJAX
     $.ajax({
       type: 'post',
       dataType: 'json',
@@ -465,14 +448,12 @@
       },
       success: function(retorno) {
         if (retorno['status'] == 'ok') {
-          // Preenche os campos do formulário do empréstimo
           document.getElementById('txt_id').value = retorno['dados']['id_emprestimo'];
           document.getElementById('txt_colaborador').value = retorno['dados']['id_colaborador'];
           document.getElementById('txt_data_emprestimo').value = retorno['dados']['data_emprestimo'];
           document.getElementById('txt_data_devolucao').value = retorno['dados']['data_devolucao'];
           document.getElementById('txt_status').value = retorno['dados']['status'];
 
-          // Preenche a tabela de equipamentos
           $('#tabela_equipamentos tbody').html('');
           retorno['equipamentos'].forEach(function(equipamento) {
             var linha = `<tr>
@@ -484,7 +465,6 @@
             $('#tabela_equipamentos tbody').append(linha);
           });
 
-          // Exibe o modal
           var modal = new bootstrap.Modal(document.getElementById('adicionar_emprestimo'));
           modal.show();
         } else {

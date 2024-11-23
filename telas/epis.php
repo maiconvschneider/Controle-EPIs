@@ -1,5 +1,4 @@
 <div class="container-fluid py-4">
-  <!-- Header with back button -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <a href="sistema.php" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
       <i class="bi bi-arrow-left"></i>
@@ -10,7 +9,7 @@
     </button>
   </div>
 
-  <!-- Statistics cards -->
+  <!-- Estatísticas -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card shadow-sm border-0 mb-3">
@@ -83,7 +82,7 @@
     </div>
   </div>
 
-  <!-- Equipment table -->
+  <!-- Tabela de Equipamentos -->
   <div class="card shadow-sm border-0">
     <div class="card-body">
       <div class="table-responsive">
@@ -126,7 +125,7 @@
                       </span>
                     </td>
                     <td class='text-end'>
-                      <button onclick='gerarCodigoBarras({$linha['id_equipamento']})' class='btn btn-sm btn-outline-info rounded-pill me-1'>
+                      <button onclick='gerarCodigoBarras({$linha['id_equipamento']})' class='btn btn-sm btn-outline-info rounded-pill me-1' title='Gerar código de barras'>
                         <i class='bi bi-upc-scan'></i>
                       </button>                      
                       <button onclick=\"ajustarEstoque({$linha['id_equipamento']}, '{$linha['nome']}', {$linha['quantidade_total']})\" class='btn btn-sm btn-outline-warning rounded-pill me-1' title='Ajustar estoque'>

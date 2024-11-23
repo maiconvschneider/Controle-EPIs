@@ -1,5 +1,4 @@
 <div class="container-fluid py-4">
-  <!-- Header with back button -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <a href="sistema.php" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
       <i class="bi bi-arrow-left"></i>
@@ -10,7 +9,7 @@
     </button>
   </div>
 
-  <!-- Statistics cards -->
+  <!-- Estatísticas -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card shadow-sm border-0 mb-3">
@@ -37,7 +36,7 @@
     </div>
   </div>
 
-  <!-- Department table -->
+  <!-- Tabela de Departamentos -->
   <div class="card shadow-sm border-0">
     <div class="card-body">
       <div class="table-responsive">

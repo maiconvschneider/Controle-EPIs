@@ -99,6 +99,10 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
       background-color: #5D4FBF;
     }
 
+    .bg-logs {
+      background-color: #1C1C1C;
+    }
+
     .bg-exit {
       background-color: #7F8C8D;
     }
@@ -135,7 +139,6 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
       $tela = isset($_GET['tela']) ? $_GET['tela'] : '';
 
       if (empty($tela)) {
-        // Mostrar dashboard quando não houver tela específica
       ?>
         <div class="welcome-section">
           <h1>Bem-vindo ao MyEPI's</h1>
@@ -184,6 +187,13 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
             <h2 class="module-title">Empréstimos</h2>
           </a>
 
+          <a href="sistema.php?tela=logs" class="module-card">
+            <div class="module-icon bg-logs">
+              <i class="bi bi-clipboard-data"></i>
+            </div>
+            <h2 class="module-title">Logs</h2>
+          </a>
+
           <a href="#" onclick="sair(); return false;" class="module-card">
             <div class="module-icon bg-exit">
               <i class="bi bi-box-arrow-right"></i>
@@ -214,6 +224,9 @@ $nomeUsuario = isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'U
             break;
           case 'emprestimos':
             include 'telas/emprestimos.php';
+            break;
+          case 'logs':
+            include 'telas/logs.php';
             break;
         }
       }

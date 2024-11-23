@@ -1,5 +1,4 @@
 <div class="container-fluid py-4">
-  <!-- Header with back button -->
   <div class="d-flex justify-content-between align-items-center mb-4">
     <a href="sistema.php" class="btn btn-outline-primary btn-lg rounded-circle shadow-sm">
       <i class="bi bi-arrow-left"></i>
@@ -10,7 +9,7 @@
     </button>
   </div>
 
-  <!-- Statistics cards -->
+  <!-- Estatísticas -->
   <div class="row mb-4">
     <div class="col-md-4">
       <div class="card shadow-sm border-0 mb-3">
@@ -82,7 +81,6 @@
   <!-- Tabelas de Colaboradores - Ativos e Inativos -->
   <div class="card shadow-sm border-0">
     <div class="card-body">
-      <!-- Nav Tabs -->
       <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
           <a class="nav-link active" id="ativos-tab" data-bs-toggle="tab" href="#ativos" role="tab" aria-controls="ativos" aria-selected="true">
@@ -96,7 +94,6 @@
         </li>
       </ul>
 
-      <!-- Conteúdo das Tabulações -->
       <div class="tab-content mt-3" id="myTabContent">
 
         <!-- Colaboradores Ativos -->
@@ -119,11 +116,11 @@
                 try {
                   include_once 'src/class/BancodeDados.php';
                   $banco = new BancodeDados;
-                  $sqlAtivos = 'SELECT c.*, d.nome as departamento 
+                  $sql = 'SELECT c.*, d.nome as departamento 
                               FROM colaboradores c 
                               LEFT JOIN departamentos d ON d.id_departamento = c.id_departamento 
                               WHERE c.ativo = 1';
-                  $dadosAtivos = $banco->Consultar($sqlAtivos, [], true);
+                  $dadosAtivos = $banco->Consultar($sql, [], true);
                   if ($dadosAtivos) {
                     foreach ($dadosAtivos as $linha) {
                       $dataNascimento = (new DateTime($linha['data_nascimento']))->format('d/m/Y');
@@ -256,7 +253,6 @@
     </div>
   </div>
 
-
   <!-- Modal -->
   <div id="adicionar_colaborador" class="modal fade" data-bs-backdrop="static">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -267,7 +263,6 @@
             <button type="reset" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-hidden="true"></button>
           </div>
 
-          <!-- Tabs navigation -->
           <ul class="nav nav-tabs nav-fill" id="tabContent">
             <li class="nav-item">
               <a class="nav-link active" id="dados-pessoais-tab" data-bs-toggle="tab" href="#dados-pessoais">
@@ -282,7 +277,6 @@
           </ul>
 
           <div class="tab-content">
-            <!-- Dados Pessoais -->
             <div class="tab-pane fade show active" id="dados-pessoais">
               <div class="modal-body p-4">
                 <input type="hidden" name="txt_id" id="txt_id" value="NOVO">
@@ -486,7 +480,6 @@
             </div>
           </div>
 
-          <!-- Botões de navegação -->
           <div class="modal-footer" style="background-color: #f7f7f7; padding: 15px;">
             <button type="reset" class="btn" style="border-radius: 5px; padding: 10px 20px;" data-bs-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-success" style="border-radius: 5px; padding: 10px 20px;" onclick="cadastrar()">Salvar</button>
@@ -521,7 +514,6 @@
           document.getElementById('list_uf').value = retorno.uf;
           document.getElementById('list_uf').dispatchEvent(new Event('change'));
 
-          // Atrasando a execução do comando
           setTimeout(function() {
             document.getElementById('list_cidade').value = retorno.localidade;
           }, 1000);
@@ -599,16 +591,8 @@
             alert(retorno['mensagem']);
           }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-          var errorMessage = `
-                Ocorreu um erro na requisição:
-                \nStatus: ${jqXHR.status} - ${jqXHR.statusText}
-                \nErro: ${textStatus}
-                \nMensagem: ${errorThrown}
-                \nResposta do servidor: ${jqXHR.responseText}
-            `;
-          console.error(errorMessage);
-          alert(errorMessage);
+        error: function(erro) {
+          alert('Ocorreu um erro na requisição: ' + erro);
         }
       });
     }
