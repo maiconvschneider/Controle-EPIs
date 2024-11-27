@@ -25,7 +25,8 @@
               $banco = new BancodeDados;
 
               // Total de equipamentos
-              $sql = 'SELECT COUNT(*) AS total FROM equipamentos';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM equipamentos';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -48,7 +49,8 @@
               $banco = new BancodeDados;
 
               // soma de equipamentos disponíveis
-              $sql = 'SELECT SUM(quantidade_disponivel) AS total FROM equipamentos';
+              $sql = 'SELECT SUM(quantidade_disponivel) AS total 
+                      FROM equipamentos';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -71,7 +73,8 @@
               $banco = new BancodeDados;
 
               // soma de equipamentos totais
-              $sql = 'SELECT SUM(quantidade_total) AS total FROM equipamentos';
+              $sql = 'SELECT SUM(quantidade_total) AS total 
+                      FROM equipamentos';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -102,7 +105,9 @@
             try {
               include_once 'src/class/BancodeDados.php';
               $banco = new BancodeDados;
-              $sql = 'SELECT * FROM equipamentos WHERE ativo = 1';
+              $sql = 'SELECT * 
+                      FROM equipamentos 
+                      WHERE ativo = 1';
               $dados = $banco->Consultar($sql, [], true);
               if ($dados) {
                 foreach ($dados as $linha) {
@@ -152,7 +157,9 @@
                 </tr>";
               }
             } catch (PDOException $erro) {
-              echo "<script>alert('{$erro->getMessage()}');</script>";
+              echo "<script>
+                      alert('{$erro->getMessage()}');
+                    </script>";
             }
             ?>
           </tbody>

@@ -25,7 +25,8 @@
               $banco = new BancodeDados;
 
               // Total de departamentos
-              $sql = 'SELECT COUNT(*) AS total FROM departamentos';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM departamentos';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -54,7 +55,9 @@
             try {
               include_once 'src/class/BancodeDados.php';
               $banco = new BancodeDados;
-              $sql = 'SELECT * FROM departamentos WHERE ativo = 1';
+              $sql = 'SELECT * 
+                      FROM departamentos 
+                      WHERE ativo = 1';
               $dados = $banco->Consultar($sql, [], true);
               if ($dados) {
                 foreach ($dados as $linha) {
@@ -92,7 +95,9 @@
                 </tr>";
               }
             } catch (PDOException $erro) {
-              echo "<script>alert('{$erro->getMessage()}');</script>";
+              echo "<script>
+                      alert('{$erro->getMessage()}');
+                    </script>";
             }
             ?>
           </tbody>

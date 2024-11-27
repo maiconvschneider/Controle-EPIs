@@ -25,7 +25,8 @@
               $banco = new BancodeDados;
 
               // Total de usuários
-              $sql = 'SELECT COUNT(*) AS total FROM usuarios';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM usuarios';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -48,7 +49,9 @@
               $banco = new BancodeDados;
 
               // Total de usuários administradores
-              $sql = 'SELECT COUNT(*) AS total FROM usuarios WHERE tipo = "A"';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM usuarios 
+                      WHERE tipo = "A"';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -71,7 +74,9 @@
               $banco = new BancodeDados;
 
               // Total de usuários administradores
-              $sql = 'SELECT COUNT(*) AS total FROM usuarios WHERE tipo = "U"';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM usuarios 
+                      WHERE tipo = "U"';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -146,7 +151,9 @@
                 </tr>";
               }
             } catch (PDOException $erro) {
-              echo "<script>alert('{$erro->getMessage()}');</script>";
+              echo "<script>
+                      alert('{$erro->getMessage()}');
+                    </script>";
             }
             ?>
           </tbody>

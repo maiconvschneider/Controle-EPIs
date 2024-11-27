@@ -23,7 +23,8 @@
               $banco = new BancodeDados;
 
               // Total de logs
-              $sql = 'SELECT COUNT(*) AS total FROM logs';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM logs';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -52,10 +53,10 @@
             try {
               include_once 'src/class/BancodeDados.php';
               $banco = new BancodeDados;
-              $sql = 'SELECT logs.id_log, usuarios.nome AS usuario, logs.acao, logs.data 
-                      FROM logs 
-                      LEFT JOIN usuarios ON logs.id_usuario = usuarios.id_usuario
-                      ORDER BY logs.data DESC';
+              $sql = 'SELECT l.id_log, usuarios.nome AS usuario, l.acao, l.data 
+                      FROM logs l 
+                      LEFT JOIN usuarios ON l.id_usuario = usuarios.id_usuario
+                      ORDER BY l.data DESC';
               $dados = $banco->Consultar($sql, [], true);
               if ($dados) {
                 foreach ($dados as $linha) {

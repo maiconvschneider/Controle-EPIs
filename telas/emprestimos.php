@@ -25,7 +25,9 @@
               $banco = new BancodeDados;
 
               // Total de empréstimos
-              $sql = 'SELECT COUNT(*) AS total FROM emprestimos WHERE ativo = 1';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM emprestimos 
+                      WHERE ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -48,7 +50,9 @@
               $banco = new BancodeDados;
 
               // Total de empréstimos abertos
-              $sql = 'SELECT COUNT(*) as total FROM emprestimos WHERE status != "Devolvido" and ativo = 1';
+              $sql = 'SELECT COUNT(*) as total 
+                      FROM emprestimos 
+                      WHERE status != "Devolvido" and ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -71,7 +75,9 @@
               $banco = new BancodeDados;
 
               // Total de empréstimos devolvidos
-              $sql = 'SELECT COUNT(*) as total FROM emprestimos WHERE status = "Devolvido" and ativo = 1';
+              $sql = 'SELECT COUNT(*) as total 
+                      FROM emprestimos 
+                      WHERE status = "Devolvido" and ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -100,8 +106,8 @@
           <tbody>
             <?php
             try {
-              $sql =
-                'SELECT e.*, c.nome AS colaborador FROM emprestimos e
+              $sql = 'SELECT e.*, c.nome AS colaborador 
+                      FROM emprestimos e
                       LEFT JOIN colaboradores c on c.id_colaborador = e.id_colaborador
                       WHERE e.ativo = 1';
               $dados = $banco->Consultar($sql, [], true);
@@ -110,9 +116,7 @@
                   $dataEmprestimoFormatada = date('d/m/Y H:i', strtotime($linha['data_emprestimo']));
 
                   // Verifica se a data de devolução está preenchida
-                  $dataDevolucaoFormatada = !empty($linha['data_devolucao'])
-                    ? date('d/m/Y H:i', strtotime($linha['data_devolucao']))
-                    : '';
+                  $dataDevolucaoFormatada = !empty($linha['data_devolucao']) ? date('d/m/Y H:i', strtotime($linha['data_devolucao'])) : '';
 
                   echo "
                   <tr>
@@ -147,7 +151,9 @@
                 </tr>";
               }
             } catch (PDOException $erro) {
-              echo "<script>alert('{$erro->getMessage()}');</script>";
+              echo "<script>
+                      alert('{$erro->getMessage()}');
+                    </script>";
             }
             ?>
           </tbody>
@@ -159,7 +165,7 @@
 
 <!-- Modal -->
 <div id="adicionar_emprestimo" class="modal fade" data-bs-backdrop="static" tabindex="-1" aria-labelledby="adicionar_emprestimoLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- Aumentei para modal-lg -->
+  <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content shadow-sm border-0">
       <form id="form_emprestimo" method="post" enctype="multipart/form-data" onsubmit="return false">
         <div class="modal-header" style="background-color: #435d7d; color: #fff;">
@@ -294,12 +300,10 @@
 <script>
   // Função para adicionar equipamento na tabela
   document.getElementById('adicionar_equipamento').addEventListener('click', function() {
-    // Seleciona os elementos necessários
     const equipamento = document.getElementById('txt_equipamento');
     const quantidade = document.getElementById('txt_quantidade');
     const tableBody = document.querySelector('#tabela_equipamentos tbody');
 
-    // Verifica se o equipamento e a quantidade são válidos
     if (equipamento.value && quantidade.value && parseInt(quantidade.value) > 0) {
       const id_equipamento = equipamento.value;
       const nome_equipamento = equipamento.options[equipamento.selectedIndex].text;
@@ -374,7 +378,6 @@
       var idEquipamento = $(this).find('.id_equipamento').val();
       var qtdEquipamento = $(this).find('td:nth-child(3)').text().trim();
 
-      // Verifica se a quantidade é válida      
       if (idEquipamento && qtdEquipamento && parseInt(qtdEquipamento) > 0) {
         var equipamento = {
           id_equipamento: idEquipamento,

@@ -25,7 +25,8 @@
               $banco = new BancodeDados;
 
               // Total de colaboradores
-              $sql = 'SELECT COUNT(*) AS total FROM colaboradores';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM colaboradores';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -46,7 +47,9 @@
             <h6 class="text-muted mb-1">Colaboradores Ativos</h6>
             <h4 class="mb-0">
               <?php
-              $sql = 'SELECT COUNT(*) AS total FROM colaboradores WHERE ativo = 1';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM colaboradores 
+                      WHERE ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -67,7 +70,9 @@
             <h6 class="text-muted mb-1">Colaboradores Inativos</h6>
             <h4 class="mb-0">
               <?php
-              $sql = 'SELECT COUNT(*) AS total FROM colaboradores WHERE ativo = 0';
+              $sql = 'SELECT COUNT(*) AS total 
+                      FROM colaboradores 
+                      WHERE ativo = 0';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -117,9 +122,9 @@
                   include_once 'src/class/BancodeDados.php';
                   $banco = new BancodeDados;
                   $sql = 'SELECT c.*, d.nome as departamento 
-                              FROM colaboradores c 
-                              LEFT JOIN departamentos d ON d.id_departamento = c.id_departamento 
-                              WHERE c.ativo = 1';
+                          FROM colaboradores c 
+                          LEFT JOIN departamentos d ON d.id_departamento = c.id_departamento 
+                          WHERE c.ativo = 1';
                   $dadosAtivos = $banco->Consultar($sql, [], true);
                   if ($dadosAtivos) {
                     foreach ($dadosAtivos as $linha) {
@@ -167,7 +172,9 @@
                     </tr>";
                   }
                 } catch (PDOException $erro) {
-                  echo "<script>alert('{$erro->getMessage()}');</script>";
+                  echo "<script>
+                          alert('{$erro->getMessage()}');
+                        </script>";
                 }
                 ?>
               </tbody>
