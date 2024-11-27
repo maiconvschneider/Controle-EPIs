@@ -11,7 +11,7 @@
 
   <!-- Estatísticas -->
   <div class="row mb-4">
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card shadow-sm border-0 mb-3">
         <div class="card-body d-flex align-items-center">
           <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
@@ -26,7 +26,8 @@
 
               // Total de equipamentos
               $sql = 'SELECT COUNT(*) AS total 
-                      FROM equipamentos';
+                      FROM equipamentos
+                      WHERE ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -35,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
       <div class="card shadow-sm border-0 mb-3">
         <div class="card-body d-flex align-items-center">
           <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
@@ -50,7 +51,8 @@
 
               // soma de equipamentos disponíveis
               $sql = 'SELECT SUM(quantidade_disponivel) AS total 
-                      FROM equipamentos';
+                      FROM equipamentos
+                      WHERE ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -59,7 +61,33 @@
         </div>
       </div>
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body d-flex align-items-center">
+          <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+            <i class="bi bi-cash-stack" style="font-size: 2rem;"></i>
+          </div>
+          <div>
+            <h6 class="text-muted mb-1">Total em Empréstimo</h6>
+            <h4 class="mb-0">
+              <?php
+              include_once 'src/class/BancodeDados.php';
+              $banco = new BancodeDados;
+
+              // soma de equipamentos em emprestimos
+              $sql = 'SELECT SUM(ee.qtd_equipamento) AS total 
+                      FROM emprestimo_equipamentos ee
+                      JOIN emprestimos e ON e.id_emprestimo = ee.id_emprestimo
+                      WHERE e.status = "Pendente" and e.ativo = 1';
+              $total = $banco->Consultar($sql, [], true);
+              echo $total[0]['total'];
+              ?>
+            </h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
       <div class="card shadow-sm border-0 mb-3">
         <div class="card-body d-flex align-items-center">
           <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
@@ -74,7 +102,8 @@
 
               // soma de equipamentos totais
               $sql = 'SELECT SUM(quantidade_total) AS total 
-                      FROM equipamentos';
+                      FROM equipamentos
+                      WHERE ativo = 1';
               $total = $banco->Consultar($sql, [], true);
               echo $total[0]['total'];
               ?>
@@ -430,8 +459,16 @@
             window.location.reload();
           }
         },
-        error: function(erro) {
-          alert('Ocorreu um erro na requisição: ' + erro);
+        error: function(jqXHR, textStatus, errorThrown) {
+          // Mensagem detalhada do erro
+          console.error('Erro na requisição AJAX:', {
+            status: jqXHR.status, // Código HTTP (ex: 404, 500)
+            statusText: jqXHR.statusText, // Texto do status (ex: "Not Found")
+            responseText: jqXHR.responseText, // Resposta do servidor (se disponível)
+            textStatus: textStatus, // Texto adicional sobre o erro (ex: "parsererror")
+            errorThrown: errorThrown // Erro detalhado (ex: "SyntaxError: Unexpected token <")
+          });
+          alert(`Erro ao tentar excluir o equipamento.\nStatus: ${jqXHR.status} - ${jqXHR.statusText}\nDetalhes: ${errorThrown}`);
         }
       });
     }
